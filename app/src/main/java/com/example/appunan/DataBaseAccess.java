@@ -38,10 +38,10 @@ public class DataBaseAccess {
     //// REQUETE VERS LA BASE DE DONNEES////
 
     public String getName(){
-        c= db.rawQuery("SELECT name FROM associations WHERE website = 'www.lesamitiesarmor.fr' ",null);
-        if(c.getCount() !=1){
+        c= db.rawQuery("SELECT address FROM association", null);
+        /*f(c.getCount() !=1){
             return "error";
-        }
+        }*/
 
         c.moveToFirst();
         return c.getString(0);

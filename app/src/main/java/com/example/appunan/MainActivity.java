@@ -2,10 +2,8 @@ package com.example.appunan;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -24,27 +22,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private String associationsNames;
-    //// DATABASE TEST ////
-    @Override
-    public void onCreate(Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-
-        final DataBaseAccess db = DataBaseAccess.getInstance(getApplicationContext());
-        db.open();
-
-        associationsNames = db.getName();
-
-        TextView textView_name = (TextView) findViewById(R.id.textView_name);
-        textView_name.setText(associationsNames);
-
-        db.close();
-    }
-    //// MAP ///
     private MapView map; //creation de la map
-
+    //// DATABASE TEST ////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+        //// MAP ///
+
+
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
@@ -74,10 +62,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
+
+
         });
 
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
+
+        final DataBaseAccess db = DataBaseAccess.getInstance(getApplicationContext());
+        db.open();
+
+        associationsNames = db.getName();
+
+        TextView textViewName = (TextView) findViewById(R.id.textView_name);
+        textViewName.setText(associationsNames);
+
+        db.close();
 
     }
     @Override
