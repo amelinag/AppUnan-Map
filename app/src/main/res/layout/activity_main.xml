@@ -51,7 +51,7 @@
         android:text="@string/resume" />
 
 
-
+    <TextView
         android:id="@+id/textView_name"
         android:layout_width="99dp"
         android:layout_height="582dp"
