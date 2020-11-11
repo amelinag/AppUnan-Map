@@ -2,6 +2,7 @@ package com.example.appunan;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -19,11 +20,19 @@ import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
-    private MapView map; //creation de la map
 
+    private String associationsNames;
+    private MapView map; //creation de la map
+    //// DATABASE TEST ////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+        //// MAP ///
+
+
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
@@ -53,10 +62,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
+
+
         });
 
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
+
+        final DataBaseAccess db = DataBaseAccess.getInstance(getApplicationContext());
+        db.open();
+
+        associationsNames = db.getName();
+
+        TextView textViewName = (TextView) findViewById(R.id.textView_name);
+        textViewName.setText(associationsNames);
+
+        db.close();
 
     }
     @Override
