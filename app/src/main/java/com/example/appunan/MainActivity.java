@@ -2,13 +2,10 @@ package com.example.appunan;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import android.widget.TextView;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -23,6 +20,7 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String associationsNames;
     private MapView map; //creation de la map
-    //// DATABASE TEST ////
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,15 +89,19 @@ public class MainActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
 
-        final DataBaseAccess db = DataBaseAccess.getInstance(getApplicationContext());
+
+        //// DATABASE TEST ////
+
+        final Association db = Association.getInstance(getApplicationContext());
         db.open();
 
-        associationsNames = db.getName();
+        //associationsNames = db.getName();
 
         TextView textViewName = (TextView) findViewById(R.id.textView_name);
         textViewName.setText(associationsNames);
-
+        List<Double[]> associationsAddress = db.getLocation(getApplicationContext());
         db.close();
+
 
     }
     @Override
@@ -112,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         map.onResume();
     }
+
+
 
 
 }
