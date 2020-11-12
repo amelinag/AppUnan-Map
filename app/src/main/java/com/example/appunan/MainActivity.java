@@ -79,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+
+
+
+
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,12 +99,11 @@ public class MainActivity extends AppCompatActivity {
 
         final Association db = Association.getInstance(getApplicationContext());
         db.open();
-
         //associationsNames = db.getName();
 
         TextView textViewName = (TextView) findViewById(R.id.textView_name);
         textViewName.setText(associationsNames);
-        List<Double[]> associationsAddress = db.getLocation(getApplicationContext());
+        List<Double[]> associationsAddress = db.getLocations(getApplicationContext());
         db.close();
 
 
