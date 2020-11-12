@@ -1,11 +1,9 @@
 package com.example.appunan;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -20,7 +18,6 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,10 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-        //// MAP ///
-
+        /// CREATION MAP ///
 
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
@@ -55,13 +49,18 @@ public class MainActivity extends AppCompatActivity {
         mapController.setZoom(18.0);  //definir le zoom
         mapController.setCenter(startPoint);
 
-        ArrayList<OverlayItem> items = new ArrayList<>();  //creation des pastilles
-        OverlayItem home = new OverlayItem("Secours Populaire Français","Association humanitaire, d'entraide, sociale",new GeoPoint(48.41090774536133,-4.491884231567383));  //creation de la pastille "home"
-        //Il y a le nom et la position de la pastille
-        Drawable m = home.getMarker(0);  //forme de la pastille (deja existante dans la librairie)
-        items.add(home); //ajout de la pastille home dans la liste des pastilles
-        items.add(new OverlayItem("ENIB", "Ecole National des Ingénieurs de Brest", new GeoPoint(48.36085891723633, -4.567451477050781)));  //creation d'une autre pastille en version plus compact
+        ///CREATION ET OUVERTURE BASE DE DONNEES ///
 
+        final Associations db = Associations.getInstance(getApplicationContext());
+
+        Map m = new Map(db,map);
+        db.open();
+
+
+        /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+
+        ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
+        System.out.println("items "+ items);
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
                 items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
@@ -75,15 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
-
-
-        });
-
-
-
-
-
-
+     });
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,17 +85,8 @@ public class MainActivity extends AppCompatActivity {
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
 
-
-        //// DATABASE TEST ////
-
-        final Association db = Association.getInstance(getApplicationContext());
-        db.open();
-        //associationsNames = db.getName();
-
-        TextView textViewName = (TextView) findViewById(R.id.textView_name);
-        textViewName.setText(associationsNames);
-        List<Double[]> associationsAddress = db.getLocations(getApplicationContext());
         db.close();
+
 
 
     }
