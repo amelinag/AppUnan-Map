@@ -11,23 +11,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Association  {
+public class Associations {
 
 
     //// CREATION, OUVERTURE, FERMETURE DE LA BASE DE DONNEES////
 
     private DataBaseManager baseManager;  //on declare le DataBaseOpenHelper
     private SQLiteDatabase db;  // objet sqlite db
-    private static Association instance;
+    private static Associations instance;
     Cursor c = null;
 
-    private Association(Context context){
+    private Associations(Context context){
         this.baseManager = new DataBaseManager(context);
     }
 
-    public static Association getInstance(Context context){
+    public static Associations getInstance(Context context){
         if(instance == null){
-            instance = new Association(context);
+            instance = new Associations(context);
         }
         return instance;
     }
@@ -62,12 +62,12 @@ public class Association  {
         while (!c.isAfterLast()){
             try {
                 //String address1 = "11 rue Lanrédec, 29200 Brest";
-                System.out.println(c.getString(0));
+                //System.out.println(c.getString(0));
 
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
 
                 int index = c.getColumnIndex("address");
-                List<Address> addresses = geocoder.getFromLocationName(c.getString(index), 4);
+                List<Address> addresses = geocoder.getFromLocationName(c.getString(index), 5);
                 Address address = addresses.get(0);
                 Double[] aLocation =  {address.getLatitude(),address.getLongitude()};
                 System.out.println("result latitude" + address.getLatitude() );
@@ -80,7 +80,23 @@ public class Association  {
                 return null;
             }
         }
+
         return location;
+
+    }
+
+    public List<String> getName()
+    {
+        c= db.rawQuery("SELECT name FROM association", null);
+        c.moveToFirst();
+        List<String> names = new ArrayList<>();
+        while (!c.isAfterLast()){
+            int index = c.getColumnIndex("name");
+            names.add(c.getString(index));
+            c.moveToNext();
+
+        }
+        return names;
 
     }
 
