@@ -21,7 +21,8 @@ public class Associations {
     private static Associations instance;
     Cursor c = null;
 
-    private Associations(Context context){
+    private Associations(Context context ){
+
         this.baseManager = new DataBaseManager(context);
     }
 
