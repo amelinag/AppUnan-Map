@@ -58,6 +58,7 @@ public class Associations {
     {
         c= db.rawQuery("SELECT address FROM association", null);
         c.moveToFirst();
+        System.out.println(c.getString(0));
         List<Double[]> location = new ArrayList<>();;
         while (!c.isAfterLast()){
             try {

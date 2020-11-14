@@ -6,11 +6,11 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class DataBaseManager extends SQLiteAssetHelper {
 
-    public static final int DATA_VERSION = 2;
+    public static final int DATA_VERSION = 1;
     private static final String DATABASE_NAME = "associations.db";
 
     public DataBaseManager(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DATA_VERSION);
     }
 
 }
