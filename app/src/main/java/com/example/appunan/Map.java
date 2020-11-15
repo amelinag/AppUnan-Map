@@ -7,12 +7,13 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Map {
     private MapView _map; //creation de la map
 
-    private Associations _associations;
+    public Associations _associations;
 
 
     public Map(Associations associations, MapView map) {
@@ -22,7 +23,11 @@ public class Map {
 
 
     public ArrayList<OverlayItem> displayItems(Context context) {
-        List<Double[]> coordinates = _associations.getLocations(context);
+        Double[] a={48.5,45.5};
+        Double[] b={48.5,49.5};
+        List<Double[]> coordinates = new ArrayList<Double[]>();
+        coordinates.add(a);
+        coordinates.add(b);
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();

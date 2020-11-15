@@ -102,6 +102,41 @@ public class Associations {
 
     }
 
+    public List<String> getPhoneNumber() {
+        c = db.rawQuery("SELECT phoneNumber FROM association", null);
+        c.moveToFirst();
+        List<String> phoneNumbers  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("phoneNumber");
+            phoneNumbers.add(c.getString(index));
+            c.moveToNext();
+        }
+        return phoneNumbers;
+    }
+
+    public List<String> getAddress() {
+        c = db.rawQuery("SELECT address FROM association", null);
+        c.moveToFirst();
+        List<String> Address  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("address");
+            Address.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Address;
+    }
+
+    public List<String> getWebsite() {
+        c = db.rawQuery("SELECT website FROM association", null);
+        c.moveToFirst();
+        List<String> Website  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("website");
+            Website.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Website;
+    }
 
 
 
