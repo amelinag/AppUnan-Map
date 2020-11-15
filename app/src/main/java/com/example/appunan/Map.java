@@ -27,11 +27,7 @@ public class Map {
         Double[] b={48.3842446,-4.5016007};
         Double[] c={48.4059796,-4.4752021};
         Double[] d={48.4212329,-4.4674397};
-        List<Double[]> coordinates = new ArrayList<Double[]>();
-        coordinates.add(a);
-        coordinates.add(b);
-        coordinates.add(c);
-        coordinates.add(d);
+        List<Double[]> coordinates = _associations.getLocations(context);
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();
