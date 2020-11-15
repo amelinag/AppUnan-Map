@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 resume.setVisibility(View.INVISIBLE);
                 close.setVisibility(View.INVISIBLE);
+                n.setVisibility(View.INVISIBLE);
+                p.setVisibility(View.INVISIBLE);
             }
         });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille

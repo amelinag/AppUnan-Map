@@ -23,11 +23,15 @@ public class Map {
 
 
     public ArrayList<OverlayItem> displayItems(Context context) {
-        Double[] a={48.5,45.5};
-        Double[] b={48.5,49.5};
+        Double[] a={48.3994098,-4.4981507};
+        Double[] b={48.3842446,-4.5016007};
+        Double[] c={48.4059796,-4.4752021};
+        Double[] d={48.4212329,-4.4674397};
         List<Double[]> coordinates = new ArrayList<Double[]>();
         coordinates.add(a);
         coordinates.add(b);
+        coordinates.add(c);
+        coordinates.add(d);
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();
