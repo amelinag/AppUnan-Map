@@ -26,9 +26,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ImageView resume;
+    private ImageView IconLocation;
+    private ImageView IconPhone;
+    private ImageView IconWebsite;
+
     private Button close;
+
     private TextView n;
+    private TextView a;
     private TextView p;
+    private TextView w;
 
     private String associationsNames;
     private MapView map; //creation de la map
@@ -43,9 +50,17 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
         this.close=(Button)findViewById(R.id.close);
+
         this.resume=(ImageView)findViewById(R.id.resume);
+        this.IconLocation=(ImageView)findViewById(R.id.ImageLocation);
+        this.IconPhone=(ImageView)findViewById(R.id.ImagePhone);
+        this.IconWebsite=(ImageView)findViewById(R.id.ImageWebsite);
+
         this.n=(TextView)findViewById(R.id.textViewName);
+        this.a=(TextView)findViewById(R.id.textViewAddress);
         this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
+        this.w=(TextView)findViewById(R.id.textViewWebsite);
+
         map= findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
@@ -74,15 +89,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
                 resume.setVisibility(View.VISIBLE);
+                IconLocation.setVisibility(View.VISIBLE);
+                IconPhone.setVisibility(View.VISIBLE);
+                IconWebsite.setVisibility(View.VISIBLE);
                 close.setVisibility(View.VISIBLE);
                 n.setVisibility(View.VISIBLE);
+                a.setVisibility(View.VISIBLE);
                 p.setVisibility(View.VISIBLE);
+                w.setVisibility(View.VISIBLE);
                 n.setText(item.getTitle());
                 for (int i=0;i<items.size();i++){
                     if (items.get(i).getTitle()==item.getTitle()){
+                        a.setText(ad.get(i));
                         p.setText(na.get(i));
-                        //n.setText(ad.get(i));
-                        //n.setText(web.get(i));
+                        w.setText(web.get(i));
                     }
 
                 }
@@ -98,9 +118,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 resume.setVisibility(View.INVISIBLE);
+                IconLocation.setVisibility(View.INVISIBLE);
+                IconPhone.setVisibility(View.INVISIBLE);
+                IconWebsite.setVisibility(View.INVISIBLE);
                 close.setVisibility(View.INVISIBLE);
                 n.setVisibility(View.INVISIBLE);
+                a.setVisibility(View.INVISIBLE);
                 p.setVisibility(View.INVISIBLE);
+                w.setVisibility(View.INVISIBLE);
             }
         });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
