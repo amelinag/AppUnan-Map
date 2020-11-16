@@ -26,16 +26,17 @@ public class Map {
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();
-
-        for (int i=0; i<coordinates.size();i++) {
+        if (coordinates != null) {
+            for (int i = 0; i < coordinates.size(); i++) {
                 Double[] loc = coordinates.get(i);
                 String n = names.get(i);
                 GeoPoint point = new GeoPoint(loc[0], loc[1]);
-                System.out.println("Latitude "+ loc[1]);
-                System.out.println("Longitude "+ loc[1]);
+                System.out.println("Latitude " + loc[1]);
+                System.out.println("Longitude " + loc[1]);
                 OverlayItem item = new OverlayItem(n, null, point);
-                System.out.println("name "+ n);
+                System.out.println("name " + n);
                 items.add(item);
+            }
         }
         return items;
     }

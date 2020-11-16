@@ -66,10 +66,10 @@ public class Associations {
                 //String address1 = "11 rue Lanrédec, 29200 Brest";
                 //System.out.println(c.getString(0));
 
-                Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+                Geocoder geocoder = new Geocoder(context, Locale.FRANCE);
 
                 int index = c.getColumnIndex("address");
-                List<Address> addresses = geocoder.getFromLocationName(c.getString(index), 5);
+                List<Address> addresses = geocoder.getFromLocationName(c.getString(index), 1);
                 Address address = addresses.get(0);
                 Double[] aLocation =  {address.getLatitude(),address.getLongitude()};
                 System.out.println("result latitude" + address.getLatitude() );
