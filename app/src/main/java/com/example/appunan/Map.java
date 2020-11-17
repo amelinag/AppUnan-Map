@@ -1,6 +1,12 @@
 package com.example.appunan;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -13,7 +19,7 @@ import java.util.List;
 public class Map {
     private MapView _map; //creation de la map
 
-    public Associations _associations;
+    private Associations _associations;
 
 
     public Map(Associations associations, MapView map) {
@@ -46,5 +52,11 @@ public class Map {
         return items;
     }
 
+    public List<String> getPhone(){
+        return _associations.getPhoneNumber();
+    }
 
+    public List<String> get(){
+        return _associations.getPhoneNumber();
+    }
 }
