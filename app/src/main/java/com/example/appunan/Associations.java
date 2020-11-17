@@ -14,7 +14,7 @@ import java.util.Locale;
 public class Associations {
 
 
-    //// CREATION, OUVERTURE, FERMETURE DE LA BASE DE DONNEES////
+    //// CREATION, OUVERTURE, FERMETURE DE LA BASE DE DONNEES/////
 
     private DataBaseManager baseManager;  //on declare le DataBaseOpenHelper
     private SQLiteDatabase db;  // objet sqlite db
