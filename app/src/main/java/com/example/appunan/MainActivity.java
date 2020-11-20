@@ -1,5 +1,10 @@
 package com.example.appunan;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
 import org.osmdroid.api.IMapController;
@@ -17,6 +23,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
     private String associationsNames;
     private MapView map; //creation de la map
+    private MyLocationNewOverlay mLocationOverlay;
+    Location gps_loc;
+    Location network_loc;
+    Location final_loc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,24 +76,47 @@ public class MainActivity extends AppCompatActivity {
         map= findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
-        GeoPoint startPoint = new GeoPoint(48.41090774536133,-4.491884231567383); //Position de depart
+        GeoPoint startPoint = new GeoPoint(48.38547134399414,-4.5312371253967285); //Position de depart
         IMapController mapController = map.getController();
         mapController.setZoom(18.0);  //definir le zoom
         mapController.setCenter(startPoint);
 
-        ///CREATION ET OUVERTURE BASE DE DONNEES ///
-
+        Radius r = new Radius(4000.0);
+        Settings setting = new Settings(r);
         final Associations db = Associations.getInstance(getApplicationContext());
-
-        Map m = new Map(db,map);
+        Map m = new Map(db,map,setting);
         db.open();
 
 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
+        try {
+
+            gps_loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            network_loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+
         /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
 
-
-
-        ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
+        ArrayList<OverlayItem> items= m.displayItems(getApplicationContext(), this);
+        //items.add(myItem);
         List<String> na =  m._associations.getPhoneNumber();
         List<String> ad =  m._associations.getAddress();
         List<String> web =  m._associations.getWebsite();
@@ -104,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 p.setVisibility(View.VISIBLE);
                 w.setVisibility(View.VISIBLE);
                 n.setText(item.getTitle());
-                for (int i=0;i<items.size();i++){
+                for (int i=0;i<(items.size()-1);i++){
                     if (items.get(i).getTitle()==item.getTitle()){
                         a.setText(ad.get(i));
                         p.setText(na.get(i));
@@ -119,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
+
      });
         close.setOnClickListener(new View.OnClickListener() {
             @Override

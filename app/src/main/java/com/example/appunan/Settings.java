@@ -1,5 +1,7 @@
 package com.example.appunan;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.List;
 
 public class Settings {
@@ -7,10 +9,9 @@ public class Settings {
     private Radius _r;
     private List<Category> _c;
 
-    public Settings(Radius radius, List<Category> categories)
+    public Settings(Radius radius)
     {
         this._r = radius;
-        this._c =categories;
     }
 
     public void changeSetting(Radius r, List<Category> c)
@@ -26,4 +27,20 @@ public class Settings {
         return settings;
     }
 
+    public double get_radius() {
+
+        return this._r.get_radius();
+    }
+
+    public boolean checkRadius(GeoPoint myLocation, GeoPoint association)
+    {
+        double distance = myLocation.distanceToAsDouble(association);
+        if (distance> get_radius())
+        {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
