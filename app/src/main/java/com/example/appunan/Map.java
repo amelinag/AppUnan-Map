@@ -15,6 +15,7 @@ public class Map {
 
     public Associations _associations;
     private Settings _settings;
+    public List<Integer> listOfNewIds = new ArrayList<>();
 
     String userCountry, userAddress;
 
@@ -26,27 +27,41 @@ public class Map {
     }
 
 
-    public ArrayList<OverlayItem> displayItems(Context context, Activity activity) {
+    public ArrayList<OverlayItem> displayItems(Context context, Activity activity, GeoPoint myLocation) {
         List<Double[]> coordinates = _associations.getLocations(context);
         List<String> names =  _associations.getName();
-
+        System.out.println("name " +names );
         ArrayList<OverlayItem> items = new ArrayList<>();
 
         if (coordinates != null) {
             for (int i = 0; i < coordinates.size(); i++) {
-                Double[] loc = coordinates.get(i);
-                String n = names.get(i);
-                GeoPoint point = new GeoPoint(loc[0], loc[1]);
+                Double[] loc = coordinates.get(i);  //récupération de la liste des coordonnées
+
+                GeoPoint point = new GeoPoint(loc[0], loc[1]); //création des points en fonction des coordonnées
                 System.out.println("Latitude " + loc[1]);
                 System.out.println("Longitude " + loc[1]);
-                OverlayItem item = new OverlayItem(n, null, point);
-                System.out.println("name " + n);
-                items.add(item);
+                //System.out.println("name " + n);
+                if(this._settings.checkRadius(myLocation, point))
+                {
+                    String n = names.get(i);  //récupération de la liste des noms
+                    OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
+                    items.add(item);
+                    Integer id =  _associations.getID(n);  //récupération de l'id en fonction du nom
+                    listOfNewIds.add(id);
+                    System.out.println("ids " +id );
+
+                }
+
             }
         }
+        System.out.println("listIds" + listOfNewIds);
 
         return items;
     }
+
+
+
+
 
 
 

@@ -83,11 +83,10 @@ public class MainActivity extends AppCompatActivity {
         final Associations db = Associations.getInstance(context);
         Map m = new Map(db, map, setting);
         db.open();
-
-
+        GeoPoint myPoint= myLocation.getMyLocation( this,  context);
         /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
 
-        ArrayList<OverlayItem> items = m.displayItems(context, this);
+        ArrayList<OverlayItem> items = m.displayItems(context, this,myPoint);
         List<String> na = m._associations.getPhoneNumber();
         List<String> ad = m._associations.getAddress();
         List<String> web = m._associations.getWebsite();
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        GeoPoint myPoint= myLocation.getMyLocation( this,  context);
 
         ArrayList<OverlayItem> myItems = new ArrayList<>();
         OverlayItem myItem = new OverlayItem("My location", "my Location", myPoint);

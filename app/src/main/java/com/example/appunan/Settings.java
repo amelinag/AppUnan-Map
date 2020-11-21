@@ -35,12 +35,10 @@ public class Settings {
     public boolean checkRadius(GeoPoint myLocation, GeoPoint association)
     {
         double distance = myLocation.distanceToAsDouble(association);
-        if (distance> get_radius())
+        if (distance <get_radius())
         {
-            return false;
-        }
-        else{
             return true;
         }
+        return false;
     }
 }

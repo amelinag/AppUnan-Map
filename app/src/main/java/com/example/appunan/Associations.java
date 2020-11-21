@@ -141,7 +141,11 @@ public class Associations {
         return Website;
     }
 
-
+    public int getID(String name) {
+        c = db.rawQuery("SELECT id FROM association where name = ?", new String[] {name});
+        c.moveToFirst();
+        return c.getInt(0);
+    }
 
 
 
