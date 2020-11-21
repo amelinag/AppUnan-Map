@@ -12,6 +12,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,11 @@ public class Map {
         Double[] b={48.3842446,-4.5016007};
         Double[] c={48.4059796,-4.4752021};
         Double[] d={48.4212329,-4.4674397};
-        List<Double[]> coordinates = _associations.getLocations(context);
+        ArrayList<Double[]> coordinates = new ArrayList<>();
+        coordinates.add(a);
+        coordinates.add(b);
+        coordinates.add(c);
+        coordinates.add(d);
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();

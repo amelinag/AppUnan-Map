@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/design_bottom_sheet"
@@ -14,114 +15,73 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cardview_light_background"
-        app:cardCornerRadius="45dp"
+        android:layout_height="302dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="35dp"
         app:cardElevation="20dp">
 
 
         <RelativeLayout
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="parent"
-            tools:context=".MainActivity">
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
             <ImageView
                 android:id="@+id/resume"
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="-15dp"
+                android:layout_width="395dp"
+                android:layout_height="282dp"
                 android:contentDescription="@string/desc"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/background"
                 tools:srcCompat="@drawable/background" />
 
-            <Button
-                android:id="@+id/close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="290dp"
-                android:layout_marginLeft="290dp"
-                android:text="@string/bouton"
-                android:visibility="invisible"
-                app:backgroundTint="#3454D5"
-                app:iconTint="#000000" />
-
             <TextView
 
                 android:id="@+id/textViewName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="25dp"
-                android:textStyle="bold"
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="170dp"
                 android:textColor="#000000"
                 android:textColorHighlight="#000000"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/textViewAddress"
-                android:layout_width="wrap_content"
+                android:layout_width="299dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="50dp"
-
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="140dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="38dp"
                 android:textColor="#000000"
                 android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/textViewPhoneNumber"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="50dp"
-
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="110dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="68dp"
                 android:textColor="#000000"
                 android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/textViewWebsite"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="50dp"
-
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="96dp"
                 android:textColor="#000000"
-                android:visibility="visible" />
-            <ImageView
-                android:id="@+id/ImageLocation"
-                android:layout_width="29dp"
-                android:layout_height="22dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="138dp"
-                android:contentDescription="@string/desc"
-                android:visibility="invisible"
-                app:srcCompat="@drawable/location"
-                tools:srcCompat="@drawable/location" />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/ImagePhone"
-                android:layout_width="29dp"
-                android:layout_height="22dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="108dp"
+                android:layout_width="24dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="66dp"
                 android:contentDescription="@string/desc"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/phone_number"
@@ -129,16 +89,24 @@
 
             <ImageView
                 android:id="@+id/ImageWebsite"
-                android:layout_width="29dp"
-                android:layout_height="22dp"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="78dp"
+                android:layout_width="24dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="94dp"
                 android:contentDescription="@string/desc"
                 android:visibility="invisible"
                 app:srcCompat="@drawable/website"
                 tools:srcCompat="@drawable/website" />
+
+            <ImageView
+                android:id="@+id/ImageLocation"
+                android:layout_width="24dp"
+                android:layout_height="19dp"
+                android:layout_marginTop="38dp"
+                android:contentDescription="@string/desc"
+                android:visibility="invisible"
+                app:srcCompat="@drawable/location"
+                tools:srcCompat="@drawable/location" />
+
 
         </RelativeLayout>
 

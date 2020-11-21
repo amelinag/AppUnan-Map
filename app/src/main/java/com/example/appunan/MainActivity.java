@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView IconPhone;
     private ImageView IconWebsite;
 
-    private Button close;
 
     private TextView n;
     private TextView a;
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
 
-        this.close=(Button)findViewById(R.id.close);
 
         this.resume=(ImageView)findViewById(R.id.resume);
         this.IconLocation=(ImageView)findViewById(R.id.ImageLocation);
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 IconLocation.setVisibility(View.VISIBLE);
                 IconPhone.setVisibility(View.VISIBLE);
                 IconWebsite.setVisibility(View.VISIBLE);
-                close.setVisibility(View.VISIBLE);
                 n.setVisibility(View.VISIBLE);
                 a.setVisibility(View.VISIBLE);
                 p.setVisibility(View.VISIBLE);
@@ -123,20 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
      });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resume.setVisibility(View.INVISIBLE);
-                IconLocation.setVisibility(View.INVISIBLE);
-                IconPhone.setVisibility(View.INVISIBLE);
-                IconWebsite.setVisibility(View.INVISIBLE);
-                close.setVisibility(View.INVISIBLE);
-                n.setVisibility(View.INVISIBLE);
-                a.setVisibility(View.INVISIBLE);
-                p.setVisibility(View.INVISIBLE);
-                w.setVisibility(View.INVISIBLE);
-            }
-        });
+
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
 
