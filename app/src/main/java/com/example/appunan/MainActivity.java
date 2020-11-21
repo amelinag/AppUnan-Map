@@ -1,17 +1,14 @@
 package com.example.appunan;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.preference.PreferenceManager;
 
 import org.osmdroid.api.IMapController;
@@ -31,11 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private ImageView resume;
+    private ImageView settings;
     private ImageView IconLocation;
     private ImageView IconPhone;
     private ImageView IconWebsite;
 
     private Button close;
+    private Button closeSettings;
+    private ImageButton openSettings;
 
     private TextView n;
     private TextView a;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Context context = getApplicationContext();
-        Context context2 = getApplicationContext();
+
         /// CREATION MAP ///
 
         Configuration.getInstance().load(getApplicationContext(),
@@ -80,11 +80,13 @@ public class MainActivity extends AppCompatActivity {
 
         Radius r = new Radius(4000.0);
         Settings setting = new Settings(r);
-        final Associations db = Associations.getInstance(context);
+        final Associations db = Associations.getInstance(context); // création de la bdd
         Map m = new Map(db, map, setting);
         db.open();
-        GeoPoint myPoint= myLocation.getMyLocation( this,  context);
-        /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+
+        GeoPoint myPoint= myLocation.getMyLocation( this,  context);  // récupérer le point correspond à ma localisation
+
+        /// CREATION DES ITEMS EN FONCTION DE LA BDD ///
 
         ArrayList<OverlayItem> items = m.displayItems(context, this,myPoint);
         List<String> na = m._associations.getPhoneNumber();
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         db.close();
+
+
+        /// AFFICHAGE ITEMS DES ASSOCIATIONS ///
 
         System.out.println("items " + items);
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
@@ -143,17 +148,12 @@ public class MainActivity extends AppCompatActivity {
         });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
 
-
+        /// CREATION ET AFFICHAGE  ITEM MYLOCATION ///
 
         ArrayList<OverlayItem> myItems = new ArrayList<>();
         OverlayItem myItem = new OverlayItem("My location", "my Location", myPoint);
-        Drawable y = myItem.getMarker(3);
+        myItem.getMarker(3);
         myItems.add(myItem);
         System.out.println("item " + myItems);
 
@@ -170,8 +170,47 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-        yLocationOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(yLocationOverlay);
+
+
+        // interaction settings
+
+        this.settings = (ImageView) findViewById(R.id.settings);
+
+        this.openSettings = (ImageButton)findViewById(R.id.openSettings);
+        this.closeSettings = (Button)findViewById(R.id.closeSettings);
+        closeSettings.setVisibility(View.INVISIBLE);
+
+        openSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                resume.setVisibility(View.INVISIBLE);
+                IconLocation.setVisibility(View.INVISIBLE);
+                IconPhone.setVisibility(View.INVISIBLE);
+                IconWebsite.setVisibility(View.INVISIBLE);
+                close.setVisibility(View.INVISIBLE);
+                n.setVisibility(View.INVISIBLE);
+                a.setVisibility(View.INVISIBLE);
+                p.setVisibility(View.INVISIBLE);
+                w.setVisibility(View.INVISIBLE);
+                settings.setVisibility(View.VISIBLE);
+                closeSettings.setVisibility(View.VISIBLE);
+                map.setBuiltInZoomControls(false);
+
+            }
+        });
+        closeSettings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                settings.setVisibility(View.INVISIBLE);
+                map.setBuiltInZoomControls(true);
+                closeSettings.setVisibility(View.INVISIBLE);
+
+
+            }
+        });
+
+
+
+
     }
     @Override
     public void onPause() {   //mise en pause de l'activité
