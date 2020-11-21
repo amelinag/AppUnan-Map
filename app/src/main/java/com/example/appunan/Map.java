@@ -68,4 +68,8 @@ public class Map {
     public List<String> getWebsite(){
         return _associations.getWebsite();
     }
+
+    public List<String> getResume(){
+        return _associations.getResume();
+    }
 }

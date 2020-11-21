@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView a;
     private TextView p;
     private TextView w;
+    private TextView r;
 
     private String associationsNames;
     private MapView map; //creation de la map
@@ -64,9 +65,11 @@ public class MainActivity extends AppCompatActivity {
         this.a=(TextView)findViewById(R.id.textViewAddress);
         this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
         this.w=(TextView)findViewById(R.id.textViewWebsite);
+        this.r=(TextView)findViewById(R.id.textViewResume);
 
         LinearLayout linearLayout=findViewById(R.id.design_bottom_sheet);
         bottomSheetBehavior= BottomSheetBehavior.from(linearLayout);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         map= findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> ad=m.getAddres();
         List<String> pn=m.getPhone();
         List<String> web=m.getWebsite();
+        List<String> res=m.getResume();
         ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
         db.close();
         System.out.println("items "+ items);
@@ -102,12 +106,14 @@ public class MainActivity extends AppCompatActivity {
                 a.setVisibility(View.VISIBLE);
                 p.setVisibility(View.VISIBLE);
                 w.setVisibility(View.VISIBLE);
+                r.setVisibility(View.VISIBLE);
                 n.setText(item.getTitle());
                 for (int i=0;i<items.size();i++){
                     if (items.get(i).getTitle()==item.getTitle()){
                         a.setText(ad.get(i));
                         p.setText(pn.get(i));
                         w.setText(web.get(i));
+                        r.setText(res.get(i));
                     }
 
                 }

@@ -141,6 +141,17 @@ public class Associations {
         return Website;
     }
 
+    public List<String> getResume() {
+        c = db.rawQuery("SELECT resume FROM association", null);
+        c.moveToFirst();
+        List<String> Resume  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("resume");
+            Resume.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Resume;
+    }
 
 
 
