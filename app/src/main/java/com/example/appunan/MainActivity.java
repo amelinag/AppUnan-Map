@@ -28,8 +28,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private ImageView resume;
     private ImageView IconLocation;
     private ImageView IconPhone;
     private ImageView IconWebsite;
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        this.resume=(ImageView)findViewById(R.id.resume);
         this.IconLocation=(ImageView)findViewById(R.id.ImageLocation);
         this.IconPhone=(ImageView)findViewById(R.id.ImagePhone);
         this.IconWebsite=(ImageView)findViewById(R.id.ImageWebsite);
@@ -98,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                resume.setVisibility(View.VISIBLE);
                 IconLocation.setVisibility(View.VISIBLE);
                 IconPhone.setVisibility(View.VISIBLE);
                 IconWebsite.setVisibility(View.VISIBLE);
