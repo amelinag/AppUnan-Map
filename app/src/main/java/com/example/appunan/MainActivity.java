@@ -4,10 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String associationsNames;
     private MapView map; //creation de la map
+    private BottomSheetBehavior bottomSheetBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
+
         this.close=(Button)findViewById(R.id.close);
 
         this.resume=(ImageView)findViewById(R.id.resume);
@@ -61,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
         this.w=(TextView)findViewById(R.id.textViewWebsite);
 
+        LinearLayout linearLayout=findViewById(R.id.design_bottom_sheet);
+        bottomSheetBehavior= BottomSheetBehavior.from(linearLayout);
         map= findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
@@ -106,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 return true;
             }
 
