@@ -78,10 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+        List<String> ad=m.getAddres();
+        List<String> pn=m.getPhone();
+        List<String> web=m.getWebsite();
         ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
-
-
-
+        db.close();
         System.out.println("items "+ items);
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
                 items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
@@ -100,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                 for (int i=0;i<items.size();i++){
                     if (items.get(i).getTitle()==item.getTitle()){
                         a.setText(ad.get(i));
-                        p.setText(m.na.get(i));
-                        w.setText(m.web.get(i));
+                        p.setText(pn.get(i));
+                        w.setText(web.get(i));
                     }
 
                 }
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
-        db.close();
+
 
 
 

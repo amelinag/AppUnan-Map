@@ -56,7 +56,11 @@ public class Map {
         return _associations.getPhoneNumber();
     }
 
-    public List<String> get(){
-        return _associations.getPhoneNumber();
+    public List<String> getAddres(){
+        return _associations.getAddress();
+    }
+
+    public List<String> getWebsite(){
+        return _associations.getWebsite();
     }
 }
