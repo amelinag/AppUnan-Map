@@ -1,5 +1,7 @@
 package com.example.appunan;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView p;
     private TextView w;
     private TextView r;
+    private TextView e;
 
     private String associationsNames;
     private MapView map; //creation de la map
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
         this.w=(TextView)findViewById(R.id.textViewWebsite);
         this.r=(TextView)findViewById(R.id.textViewResume);
+        this.e=(TextView)findViewById(R.id.textViewEvent);
 
         LinearLayout linearLayout=findViewById(R.id.design_bottom_sheet);
         bottomSheetBehavior= BottomSheetBehavior.from(linearLayout);
@@ -88,21 +92,14 @@ public class MainActivity extends AppCompatActivity {
         List<String> pn=m.getPhone();
         List<String> web=m.getWebsite();
         List<String> res=m.getResume();
+        List<String> ev=m.getEvent();
         ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
         db.close();
-        System.out.println("items "+ items);
+        System.out.println(ev.get(3));
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
                 items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                IconLocation.setVisibility(View.VISIBLE);
-                IconPhone.setVisibility(View.VISIBLE);
-                IconWebsite.setVisibility(View.VISIBLE);
-                n.setVisibility(View.VISIBLE);
-                a.setVisibility(View.VISIBLE);
-                p.setVisibility(View.VISIBLE);
-                w.setVisibility(View.VISIBLE);
-                r.setVisibility(View.VISIBLE);
                 n.setText(item.getTitle());
                 for (int i=0;i<items.size();i++){
                     if (items.get(i).getTitle()==item.getTitle()){
@@ -110,19 +107,27 @@ public class MainActivity extends AppCompatActivity {
                         p.setText(pn.get(i));
                         w.setText(web.get(i));
                         r.setText(res.get(i));
+                        if("".equals(ev.get(i))){
+                            System.out.println("c'est bon"+ ev.get(2));
+                            e.setText("Pas d'événement");
+                            e.setTextColor(Color.rgb(255,0,0));
+                        }
+                        else{
+                            e.setText(ev.get(i));
+                            e.setTextColor(Color.rgb(0,0,255));
+                        }
                     }
-
                 }
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 return true;
             }
+
 
             @Override
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
      });
-
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
 

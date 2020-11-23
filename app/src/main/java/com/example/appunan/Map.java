@@ -1,6 +1,7 @@
 package com.example.appunan;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.lang.reflect.Array;
@@ -42,6 +44,7 @@ public class Map {
         //System.out.println("\n\ncoordinates= " + coordinates );
         List<String> names =  _associations.getName();
         ArrayList<OverlayItem> items = new ArrayList<>();
+        Marker startMarker = new Marker(_map);
         if (coordinates != null) {
             for (int i = 0; i < coordinates.size(); i++) {
                 Double[] loc = coordinates.get(i);
@@ -50,8 +53,10 @@ public class Map {
                 System.out.println("Latitude " + loc[1]);
                 System.out.println("Longitude " + loc[1]);
                 OverlayItem item = new OverlayItem(n, null, point);
+
                 System.out.println("name " + n);
                 items.add(item);
+
             }
         }
         return items;
@@ -71,5 +76,9 @@ public class Map {
 
     public List<String> getResume(){
         return _associations.getResume();
+    }
+
+    public List<String> getEvent(){
+        return _associations.getEvent();
     }
 }

@@ -10,7 +10,7 @@
     android:orientation="vertical"
     app:layout_behavior="@string/bottom_sheet_behavior"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="150dp"
+    app:behavior_peekHeight="135dp"
     >
 
     <androidx.cardview.widget.CardView
@@ -46,7 +46,7 @@
                 android:textColorHighlight="#000000"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/textViewAddress"
@@ -56,7 +56,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="38dp"
                 android:textColor="#000000"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/textViewPhoneNumber"
@@ -66,7 +66,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="68dp"
                 android:textColor="#000000"
-                android:visibility="invisible" />
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/textViewWebsite"
@@ -76,7 +76,8 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="96dp"
                 android:textColor="#000000"
-                android:visibility="invisible" />
+                android:autoLink="web"
+                android:visibility="visible" />
 
 
             <ImageView
@@ -85,7 +86,7 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="66dp"
                 android:contentDescription="@string/desc"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:srcCompat="@drawable/phone_number"
                 tools:srcCompat="@drawable/phone_number" />
 
@@ -95,7 +96,7 @@
                 android:layout_height="21dp"
                 android:layout_marginTop="94dp"
                 android:contentDescription="@string/desc"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:srcCompat="@drawable/website"
                 tools:srcCompat="@drawable/website" />
 
@@ -105,14 +106,46 @@
                 android:layout_height="19dp"
                 android:layout_marginTop="38dp"
                 android:contentDescription="@string/desc"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:srcCompat="@drawable/location"
                 tools:srcCompat="@drawable/location" />
 
+            <ImageView
+                android:id="@+id/ImageEvent"
+                android:layout_width="24dp"
+                android:layout_height="19dp"
+                android:layout_marginTop="122dp"
+                android:contentDescription="@string/desc"
+                android:visibility="visible"
+                app:srcCompat="@drawable/event"
+                tools:srcCompat="@drawable/event" />
+
+            <ScrollView
+                android:layout_width="365dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="122dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/textViewEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000" />
+
+
+                </LinearLayout>
+            </ScrollView>
             <ScrollView
                 android:layout_width="380dp"
                 android:layout_height="128dp"
-                android:layout_marginTop="135dp">
+                android:layout_marginTop="175dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
