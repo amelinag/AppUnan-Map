@@ -130,7 +130,8 @@ public class MainActivity extends AppCompatActivity {
      });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
-
+        mOverlay.setMarkerBackgroundColor(Color.rgb(0,0,255));
+        mOverlay.setMarkerDescriptionForegroundColor(Color.argb(55,0,0,255));
 
 
 
