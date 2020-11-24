@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
     </org.osmdroid.views.MapView>
 
     <ImageView
@@ -132,11 +133,15 @@
         android:id="@+id/openSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="300dp"
+        android:layout_marginStart="30dp"
         android:layout_marginLeft="300dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="25dp"
+        android:background="@android:color/transparent"
+        android:scrollbarThumbHorizontal="@android:color/transparent"
+        android:scrollbarThumbVertical="@android:color/transparent"
         android:src="@drawable/settings"
-        android:tint="#2B2B2B" />
+        android:tint="@android:color/transparent" />
 
     <ImageView
         android:id="@+id/settings"
@@ -161,4 +166,43 @@
         app:backgroundTint="#3454D5"
         app:iconTint="#000000" />
 
+    <TextView
+        android:id="@+id/titleSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text= "Paramètres"
+        android:textColor="#3454D5"
+        android:visibility="invisible"
+        android:textSize="40sp"
+        android:gravity="center_horizontal"/>
+
+
+    <TextView
+        android:id="@+id/textRadius"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_centerHorizontal="true"
+        android:text="Rayon d'affichage"
+        android:textColor="#3454D5"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        android:gravity="center_horizontal"/>
+
+
+
+
+    <SeekBar
+        android:id="@+id/choseRadius"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:max="50"
+        android:progress="3"
+        android:visibility="invisible"  />
 </RelativeLayout>

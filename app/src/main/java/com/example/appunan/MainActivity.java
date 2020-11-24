@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity<radiusMeters> extends AppCompatActivity {
 
 
     private ImageView resume;
@@ -41,10 +43,22 @@ public class MainActivity extends AppCompatActivity {
     private TextView a;
     private TextView p;
     private TextView w;
+    private TextView textRadius;
+    private TextView titleSettings;
+
+    private SeekBar chooseRadius;
 
     private String associationsNames;
     private MapView map; //creation de la map
     private MyLocation myLocation = new MyLocation();
+
+
+    Radius radius = new Radius();
+    Settings setting = new Settings(radius);
+    ArrayList<OverlayItem> items= new ArrayList<>();
+
+
+
 
 
     @Override
@@ -78,24 +92,23 @@ public class MainActivity extends AppCompatActivity {
         mapController.setZoom(18.0);  //definir le zoom
         mapController.setCenter(startPoint);
 
-        Radius r = new Radius(4000.0);
-        Settings setting = new Settings(r);
         final Associations db = Associations.getInstance(context); // création de la bdd
         Map m = new Map(db, map, setting);
+        System.out.println("radius " + radius.getRadius());
         db.open();
 
-        GeoPoint myPoint= myLocation.getMyLocation( this,  context);  // récupérer le point correspond à ma localisation
-
         /// CREATION DES ITEMS EN FONCTION DE LA BDD ///
+        GeoPoint myPoint= myLocation.getMyLocation( this,  context);  // récupérer le point correspond à ma localisation
+        List<GeoPoint> allPoints = m.getPoints(context);
+        List<String> names = m.getNames();
 
-        ArrayList<OverlayItem> items = m.displayItems(context, this,myPoint);
         List<String> na = m._associations.getPhoneNumber();
         List<String> ad = m._associations.getAddress();
         List<String> web = m._associations.getWebsite();
-
-
         db.close();
 
+
+        this.items = m.displayItems(myPoint, allPoints, names);
 
         /// AFFICHAGE ITEMS DES ASSOCIATIONS ///
 
@@ -181,6 +194,12 @@ public class MainActivity extends AppCompatActivity {
         this.closeSettings = (Button)findViewById(R.id.closeSettings);
         closeSettings.setVisibility(View.INVISIBLE);
 
+        this.chooseRadius=(SeekBar)findViewById(R.id.choseRadius);
+        this.textRadius= (TextView)findViewById(R.id.textRadius);
+        this.titleSettings= (TextView)findViewById(R.id.titleSettings);
+
+        int progress = chooseRadius.getProgress();
+
         openSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 resume.setVisibility(View.INVISIBLE);
@@ -194,7 +213,9 @@ public class MainActivity extends AppCompatActivity {
                 w.setVisibility(View.INVISIBLE);
                 settings.setVisibility(View.VISIBLE);
                 closeSettings.setVisibility(View.VISIBLE);
-                map.setBuiltInZoomControls(false);
+                chooseRadius.setVisibility(View.VISIBLE);
+                textRadius.setVisibility(View.VISIBLE);
+                titleSettings.setVisibility(View.VISIBLE);
 
             }
         });
@@ -203,15 +224,45 @@ public class MainActivity extends AppCompatActivity {
                 settings.setVisibility(View.INVISIBLE);
                 map.setBuiltInZoomControls(true);
                 closeSettings.setVisibility(View.INVISIBLE);
-
+                chooseRadius.setVisibility(View.INVISIBLE);
+                textRadius.setVisibility(View.INVISIBLE);
+                titleSettings.setVisibility(View.INVISIBLE);
 
             }
         });
 
 
 
+        // perform seek bar change listener event used for getting the progress value
+        chooseRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            int progressChangedValue = 0;
+            double  radiusMeters =0.0;
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressChangedValue = progress;
+                double radiusMeters = (double)progressChangedValue*1000;
+                System.out.println(radiusMeters);
+                MainActivity.this.radius.setRadius(radiusMeters);
+                //MainActivity.this.items = m.displayItems(myPoint, allPoints);
+
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
+                        Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
 
     }
+
     @Override
     public void onPause() {   //mise en pause de l'activité
         super.onPause();

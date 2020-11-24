@@ -14,10 +14,9 @@ public class Settings {
         this._r = radius;
     }
 
-    public void changeSetting(Radius r, List<Category> c)
+    public void changeSetting(Radius r)
     {
         this._r = r;
-        this._c = c;
     }
     public Object[] getSettings()
     {
@@ -27,18 +26,24 @@ public class Settings {
         return settings;
     }
 
-    public double get_radius() {
+    public double getRadiusDouble() {
 
-        return this._r.get_radius();
+        return this._r.getRadius();
+    }
+
+    public Radius getRadius() {
+
+        return this._r;
     }
 
     public boolean checkRadius(GeoPoint myLocation, GeoPoint association)
     {
         double distance = myLocation.distanceToAsDouble(association);
-        if (distance <get_radius())
+        if (distance <getRadiusDouble())
         {
             return true;
         }
         return false;
     }
+
 }

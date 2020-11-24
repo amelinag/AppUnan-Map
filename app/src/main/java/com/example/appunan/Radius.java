@@ -2,19 +2,19 @@ package com.example.appunan;
 
 public class Radius {
 
-    private double _radius;
+    private double _radius= 50000.0;
 
-    public Radius(double radius)
+    public Radius()
     {
-        this._radius = radius;
     }
 
-    public double get_radius() {
+    public double getRadius() {
         return _radius;
     }
 
-    public void set_radius(double radius) {
+    public void setRadius(double radius) {
         this._radius = radius;
+        System.out.println("set_radius");
     }
 
 
