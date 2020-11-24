@@ -56,21 +56,24 @@ public class MainActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
 
-
-        this.IconLocation=(ImageView)findViewById(R.id.ImageLocation);
-        this.IconPhone=(ImageView)findViewById(R.id.ImagePhone);
-        this.IconWebsite=(ImageView)findViewById(R.id.ImageWebsite);
-
         this.n=(TextView)findViewById(R.id.textViewName);
         this.a=(TextView)findViewById(R.id.textViewAddress);
         this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
         this.w=(TextView)findViewById(R.id.textViewWebsite);
         this.r=(TextView)findViewById(R.id.textViewResume);
         this.e=(TextView)findViewById(R.id.textViewEvent);
+        List<TextView> t=new ArrayList<TextView>();
+        t.add(n);
+        t.add(a);
+        t.add(p);
+        t.add(w);
+        t.add(r);
+        t.add(e);
 
         LinearLayout linearLayout=findViewById(R.id.design_bottom_sheet);
         bottomSheetBehavior= BottomSheetBehavior.from(linearLayout);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
         map= findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
@@ -100,25 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                n.setText(item.getTitle());
-                for (int i=0;i<items.size();i++){
-                    if (items.get(i).getTitle()==item.getTitle()){
-                        a.setText(ad.get(i));
-                        p.setText(pn.get(i));
-                        w.setText(web.get(i));
-                        r.setText(res.get(i));
-                        if("".equals(ev.get(i))){
-                            System.out.println("c'est bon"+ ev.get(2));
-                            e.setText("Pas d'événement");
-                            e.setTextColor(Color.rgb(255,0,0));
-                        }
-                        else{
-                            e.setText(ev.get(i));
-                            e.setTextColor(Color.rgb(0,0,255));
-                        }
-                    }
-                }
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                m.Consult_association(bottomSheetBehavior,t,ad,pn,web,ev,res,item,items);
                 return true;
             }
 
@@ -130,12 +115,6 @@ public class MainActivity extends AppCompatActivity {
      });
         mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
         map.getOverlays().add(mOverlay);
-        mOverlay.setMarkerBackgroundColor(Color.rgb(0,0,255));
-        mOverlay.setMarkerDescriptionForegroundColor(Color.argb(55,0,0,255));
-
-
-
-
     }
     @Override
     public void onPause() {   //mise en pause de l'activité

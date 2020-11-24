@@ -20,7 +20,6 @@
         app:cardCornerRadius="35dp"
         app:cardElevation="20dp">
 
-
         <RelativeLayout
             style="@style/TextAppearance.AppCompat.Headline"
             android:background="@drawable/background"
@@ -79,7 +78,6 @@
                 android:autoLink="web"
                 android:visibility="visible" />
 
-
             <ImageView
                 android:id="@+id/ImagePhone"
                 android:layout_width="24dp"
@@ -132,13 +130,11 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
                     <TextView
                         android:id="@+id/textViewEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#000000" />
-
 
                 </LinearLayout>
             </ScrollView>
@@ -152,16 +148,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
                     <TextView
                         android:id="@+id/textViewResume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-
                 </LinearLayout>
+                
             </ScrollView>
-
 
         </RelativeLayout>
 
