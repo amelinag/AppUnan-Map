@@ -107,7 +107,7 @@ public class Map {
         ArrayList<OverlayItem> items = new ArrayList<>();
 
         if (pointsAssociations != null) {
-            for (int i = 0; i < names.size(); i++) {
+            for (int i = 0; i < pointsAssociations.size(); i++) {
                 GeoPoint point = pointsAssociations.get(i);
                 if (this._settings.checkRadius(myLocation, point)) {
                     String n = names.get(i);  //récupération de la liste des noms

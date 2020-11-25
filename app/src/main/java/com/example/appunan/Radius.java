@@ -2,7 +2,7 @@ package com.example.appunan;
 
 public class Radius {
 
-    private double _radius= 50000.0;
+    private double _radius= 5000.0;
 
     public Radius()
     {
