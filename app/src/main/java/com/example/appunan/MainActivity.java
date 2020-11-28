@@ -3,9 +3,13 @@ package com.example.appunan;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +74,11 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         return items;
     }
 
+
+    private SearchView searchView;
+    private ListView listView;
+    private ArrayList list;
+    private ArrayAdapter adapter;
     
 
     @Override
@@ -77,6 +86,9 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Context context = getApplicationContext();
+
+        ListAdapter adapter;
+
 
         /// CREATION MAP ///
 
@@ -163,7 +175,6 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         this.textRadius= (TextView)findViewById(R.id.textRadius);
         this.titleSettings= (TextView)findViewById(R.id.titleSettings);
 
-        int progress = chooseRadius.getProgress();
 
         openSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -215,7 +226,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                     }
                 }
                 map.getOverlays().add(yLocationOverlay);
-                double radiusMeters = (double)progress*1000+1;
+                double radiusMeters = (double)progress*1000;
                 System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
                 MainActivity.this.radius.setRadius(radiusMeters);
                 MainActivity.this.setItems(m.displayItems(myPoint,MainActivity.this.allPoints, MainActivity.this.names));
@@ -289,6 +300,30 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 a.setVisibility(View.INVISIBLE);
                 p.setVisibility(View.INVISIBLE);
                 w.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        this.searchView = findViewById(R.id.search);
+        this.listView = findViewById(R.id.listView);
+        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,this.names);
+        listView.setAdapter(adapter);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(list.contains(query)){
+                    ((ArrayAdapter) adapter).getFilter().filter(query);
+
+                }else{
+                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }
+
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ((ArrayAdapter) adapter).getFilter().filter(newText);
+                listView.setVisibility(View.VISIBLE);
+                return false;
             }
         });
 
