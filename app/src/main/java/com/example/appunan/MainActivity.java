@@ -1,21 +1,33 @@
 package com.example.appunan;
 
+
 import android.content.Context;
+
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
+
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -36,18 +48,22 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
 
     private ImageView resume;
     private ImageView settings;
+
     private ImageView IconLocation;
     private ImageView IconPhone;
     private ImageView IconWebsite;
+
 
     private Button close;
     private Button closeSettings;
     private ImageButton openSettings;
 
+
     private TextView n;
     private TextView a;
     private TextView p;
     private TextView w;
+
     private TextView textRadius;
     private TextView titleSettings;
 
@@ -81,6 +97,14 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
     private ArrayAdapter adapter;
     
 
+    private TextView r;
+    private TextView e;
+
+    private String associationsNames;
+    private MapView map; //creation de la map
+    private BottomSheetBehavior bottomSheetBehavior;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +119,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
+/*
         this.close = (Button) findViewById(R.id.close);
 
         this.resume = (ImageView) findViewById(R.id.resume);
@@ -105,7 +130,26 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         this.n = (TextView) findViewById(R.id.textViewName);
         this.a = (TextView) findViewById(R.id.textViewAddress);
         this.p = (TextView) findViewById(R.id.textViewPhoneNumber);
-        this.w = (TextView) findViewById(R.id.textViewWebsite);
+        this.w = (TextView) findViewById(R.id.textViewWebsite);*/
+
+        this.n=(TextView)findViewById(R.id.textViewName);
+        this.a=(TextView)findViewById(R.id.textViewAddress);
+        this.p=(TextView)findViewById(R.id.textViewPhoneNumber);
+        this.w=(TextView)findViewById(R.id.textViewWebsite);
+        this.r=(TextView)findViewById(R.id.textViewResume);
+        this.e=(TextView)findViewById(R.id.textViewEvent);
+        List<TextView> t=new ArrayList<TextView>();
+        t.add(n);
+        t.add(a);
+        t.add(p);
+        t.add(w);
+        t.add(r);
+        t.add(e);
+
+        LinearLayout linearLayout=findViewById(R.id.design_bottom_sheet);
+        bottomSheetBehavior= BottomSheetBehavior.from(linearLayout);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
 
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
@@ -126,10 +170,12 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         this.allPoints = m.getPoints(context);
         this.names = m.getNames();
 
+      /*
         List<String> na = m._associations.getPhoneNumber();
         List<String> ad = m._associations.getAddress();
         List<String> web = m._associations.getWebsite();
-        db.close();
+        db.close();*/
+
 
 
         //this.setItems(m.displayItems(myPoint, allPoints, names));
@@ -148,13 +194,31 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 myItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
+
+        /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+        List<String> ad=m.getAddres();
+        List<String> pn=m.getPhone();
+        List<String> web=m.getWebsite();
+        List<String> res=m.getResume();
+        List<String> ev=m.getEvent();
+        ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
+        db.close();
+        System.out.println(ev.get(3));
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
+                items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+            @Override
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                m.Consult_association(bottomSheetBehavior,t,ad,pn,web,ev,res,item,items);
+
                 return true;
             }
+
 
             @Override
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
+
 
         });
 
@@ -327,6 +391,10 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
             }
         });
 
+     });
+                  /*
+        mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+        map.getOverlays().add(mOverlay);*/
     }
 
     @Override

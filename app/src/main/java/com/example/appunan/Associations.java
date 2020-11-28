@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.sql.RowSetEvent;
+
 public class Associations {
 
 
-    //// CREATION, OUVERTURE, FERMETURE DE LA BASE DE DONNEES////
+    //// CREATION, OUVERTURE, FERMETURE DE LA BASE DE DONNEES/////
 
     private DataBaseManager baseManager;  //on declare le DataBaseOpenHelper
     private SQLiteDatabase db;  // objet sqlite db
@@ -141,12 +143,37 @@ public class Associations {
         return Website;
     }
 
+
     public int getID(String name) {
         c = db.rawQuery("SELECT id FROM association where name = ?", new String[] {name});
         c.moveToFirst();
         return c.getInt(0);
     }
 
+
+    public List<String> getResume() {
+        c = db.rawQuery("SELECT resume FROM association", null);
+        c.moveToFirst();
+        List<String> Resume  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("resume");
+            Resume.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Resume;
+    }
+
+    public List<String> getEvent() {
+        c = db.rawQuery("SELECT event FROM association", null);
+        c.moveToFirst();
+        List<String> Event  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("event");
+            Event.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Event;
+    }
 
 
 }

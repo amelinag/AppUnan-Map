@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="#FFFFFF"
     app:layout_constraintBottom_toTopOf="parent"
+
+    android:visibility="visible"
+
     tools:context=".MainActivity">
 
     <org.osmdroid.views.MapView
@@ -17,6 +22,7 @@
 
 
     </org.osmdroid.views.MapView>
+
 
     <ImageView
         android:id="@+id/resume"
@@ -104,29 +110,11 @@
         android:visibility="invisible"
         app:srcCompat="@drawable/location" />
 
-    <ImageView
-        android:id="@+id/ImagePhone"
-        android:layout_width="29dp"
-        android:layout_height="22dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="108dp"
-        android:contentDescription="@string/desc"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/phone_number" />
+    <include
+        layout="@layout/bottom_sheet"/>
 
-    <ImageView
-        android:id="@+id/ImageWebsite"
-        android:layout_width="29dp"
-        android:layout_height="22dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="78dp"
-        android:contentDescription="@string/desc"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/website" />
+
+
 
     <ImageButton
         android:id="@+id/openSettings"
@@ -219,4 +207,4 @@
         android:layout_below="@+id/search"
         android:visibility="invisible" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
