@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/design_bottom_sheet"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="135dp"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="35dp"
+        app:cardElevation="20dp">
+
+        <RelativeLayout
+            style="@style/TextAppearance.AppCompat.Headline"
+            android:background="@drawable/background"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="170dp"
+                android:layout_marginLeft="170dp"
+                android:background="@color/black" />
+
+            <TextView
+
+                android:id="@+id/textViewName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textColorHighlight="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textViewAddress"
+                android:layout_width="299dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="38dp"
+                android:textColor="#000000"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textViewPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="68dp"
+                android:textColor="#000000"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/textViewWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="96dp"
+                android:textColor="#000000"
+                android:autoLink="web"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/ImagePhone"
+                android:layout_width="24dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="66dp"
+                android:contentDescription="@string/desc"
+                android:visibility="visible"
+                app:srcCompat="@drawable/phone_number"
+                tools:srcCompat="@drawable/phone_number" />
+
+            <ImageView
+                android:id="@+id/ImageWebsite"
+                android:layout_width="24dp"
+                android:layout_height="21dp"
+                android:layout_marginTop="94dp"
+                android:contentDescription="@string/desc"
+                android:visibility="visible"
+                app:srcCompat="@drawable/website"
+                tools:srcCompat="@drawable/website" />
+
+            <ImageView
+                android:id="@+id/ImageLocation"
+                android:layout_width="24dp"
+                android:layout_height="19dp"
+                android:layout_marginTop="38dp"
+                android:contentDescription="@string/desc"
+                android:visibility="visible"
+                app:srcCompat="@drawable/location"
+                tools:srcCompat="@drawable/location" />
+
+            <ImageView
+                android:id="@+id/ImageEvent"
+                android:layout_width="24dp"
+                android:layout_height="19dp"
+                android:layout_marginTop="122dp"
+                android:contentDescription="@string/desc"
+                android:visibility="visible"
+                app:srcCompat="@drawable/event"
+                tools:srcCompat="@drawable/event" />
+
+            <ScrollView
+                android:layout_width="365dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="122dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewEvent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+            </ScrollView>
+            <ScrollView
+                android:layout_width="380dp"
+                android:layout_height="128dp"
+                android:layout_marginTop="175dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewResume"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                
+            </ScrollView>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

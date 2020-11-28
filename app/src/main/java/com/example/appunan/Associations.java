@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.sql.RowSetEvent;
+
 public class Associations {
 
 
@@ -141,8 +143,29 @@ public class Associations {
         return Website;
     }
 
+    public List<String> getResume() {
+        c = db.rawQuery("SELECT resume FROM association", null);
+        c.moveToFirst();
+        List<String> Resume  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("resume");
+            Resume.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Resume;
+    }
 
-
+    public List<String> getEvent() {
+        c = db.rawQuery("SELECT event FROM association", null);
+        c.moveToFirst();
+        List<String> Event  = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            int index = c.getColumnIndex("event");
+            Event.add(c.getString(index));
+            c.moveToNext();
+        }
+        return Event;
+    }
 
 
 }
