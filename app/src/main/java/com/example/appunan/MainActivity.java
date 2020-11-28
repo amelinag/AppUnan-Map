@@ -2,25 +2,17 @@ package com.example.appunan;
 
 
 import android.content.Context;
-
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
-
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -100,8 +92,6 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
     private TextView r;
     private TextView e;
 
-    private String associationsNames;
-    private MapView map; //creation de la map
     private BottomSheetBehavior bottomSheetBehavior;
 
 
@@ -119,18 +109,6 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         setContentView(R.layout.activity_main);
-/*
-        this.close = (Button) findViewById(R.id.close);
-
-        this.resume = (ImageView) findViewById(R.id.resume);
-        this.IconLocation = (ImageView) findViewById(R.id.ImageLocation);
-        this.IconPhone = (ImageView) findViewById(R.id.ImagePhone);
-        this.IconWebsite = (ImageView) findViewById(R.id.ImageWebsite);
-
-        this.n = (TextView) findViewById(R.id.textViewName);
-        this.a = (TextView) findViewById(R.id.textViewAddress);
-        this.p = (TextView) findViewById(R.id.textViewPhoneNumber);
-        this.w = (TextView) findViewById(R.id.textViewWebsite);*/
 
         this.n=(TextView)findViewById(R.id.textViewName);
         this.a=(TextView)findViewById(R.id.textViewAddress);
@@ -170,19 +148,36 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         this.allPoints = m.getPoints(context);
         this.names = m.getNames();
 
-      /*
-        List<String> na = m._associations.getPhoneNumber();
-        List<String> ad = m._associations.getAddress();
-        List<String> web = m._associations.getWebsite();
-        db.close();*/
+
+/// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+        List<String> ad=m.getAddres();
+        List<String> pn=m.getPhone();
+        List<String> web=m.getWebsite();
+        List<String> res=m.getResume();
+        List<String> ev=m.getEvent();
+
+        db.close();
+        System.out.println(ev.get(3));
 
 
+        /*
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
+                items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+            @Override
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
 
-        //this.setItems(m.displayItems(myPoint, allPoints, names));
+                return true;
+            }
+
+            @Override
+            public boolean onItemLongPress(int index, OverlayItem item) {
+                return false;
+            }
+        });*/
 
 
-
-        /// CREATION ET AFFICHAGE  ITEM MYLOCATION ///
+        ///////////////////// CREATION ET AFFICHAGE  ITEM MYLOCATION ///////////////////////////////
 
         ArrayList<OverlayItem> myItems = new ArrayList<>();
         OverlayItem myItem = new OverlayItem("My location", "my Location", myPoint);
@@ -194,25 +189,9 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 myItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
-
-        /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
-        List<String> ad=m.getAddres();
-        List<String> pn=m.getPhone();
-        List<String> web=m.getWebsite();
-        List<String> res=m.getResume();
-        List<String> ev=m.getEvent();
-        ArrayList<OverlayItem> items= m.displayItems(getApplicationContext());
-        db.close();
-        System.out.println(ev.get(3));
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
-                items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                m.Consult_association(bottomSheetBehavior,t,ad,pn,web,ev,res,item,items);
-
                 return true;
-            }
 
+            }
 
             @Override
             public boolean onItemLongPress(int index, OverlayItem item) {
@@ -224,8 +203,10 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
 
         map.getOverlays().add(yLocationOverlay);
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        ///////////////////// CREATION ET AFFICHAGE SETTINGS ///////////////////////////////////////
 
         // interaction settings
 
@@ -242,15 +223,6 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
 
         openSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                resume.setVisibility(View.INVISIBLE);
-                IconLocation.setVisibility(View.INVISIBLE);
-                IconPhone.setVisibility(View.INVISIBLE);
-                IconWebsite.setVisibility(View.INVISIBLE);
-                close.setVisibility(View.INVISIBLE);
-                n.setVisibility(View.INVISIBLE);
-                a.setVisibility(View.INVISIBLE);
-                p.setVisibility(View.INVISIBLE);
-                w.setVisibility(View.INVISIBLE);
                 settings.setVisibility(View.VISIBLE);
                 closeSettings.setVisibility(View.VISIBLE);
                 chooseRadius.setVisibility(View.VISIBLE);
@@ -270,8 +242,10 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
 
             }
         });
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
 
+        //////////////////////////////////FILTRAGE PAR RADIUS //////////////////////////////////////
 
         // perform seek bar change listener event used for getting the progress value
         chooseRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -301,24 +275,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                         MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        resume.setVisibility(View.VISIBLE);
-                        IconLocation.setVisibility(View.VISIBLE);
-                        IconPhone.setVisibility(View.VISIBLE);
-                        IconWebsite.setVisibility(View.VISIBLE);
-                        close.setVisibility(View.VISIBLE);
-                        n.setVisibility(View.VISIBLE);
-                        a.setVisibility(View.VISIBLE);
-                        p.setVisibility(View.VISIBLE);
-                        w.setVisibility(View.VISIBLE);
-                        n.setText(item.getTitle());
-                        for (int i = 0; i < (items.size()); i++) {
-                            if (items.get(i).getTitle() == item.getTitle()) {
-                                a.setText(ad.get(i));
-                                p.setText(na.get(i));
-                                w.setText(web.get(i));
-                            }
-
-                        }
+                        m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, MainActivity.this.items);
                         return true;
                     }
 
@@ -344,29 +301,13 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
 
 
-
             }
 
         });
-        /// AFFICHAGE ITEMS DES ASSOCIATIONS ///
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resume.setVisibility(View.INVISIBLE);
-                IconLocation.setVisibility(View.INVISIBLE);
-                IconPhone.setVisibility(View.INVISIBLE);
-                IconWebsite.setVisibility(View.INVISIBLE);
-                close.setVisibility(View.INVISIBLE);
-                n.setVisibility(View.INVISIBLE);
-                a.setVisibility(View.INVISIBLE);
-                p.setVisibility(View.INVISIBLE);
-                w.setVisibility(View.INVISIBLE);
-            }
-        });
-
+        /*
         this.searchView = findViewById(R.id.search);
         this.listView = findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,this.names);
@@ -389,12 +330,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 listView.setVisibility(View.VISIBLE);
                 return false;
             }
-        });
-
-     });
-                  /*
-        mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
-        map.getOverlays().add(mOverlay);*/
+        });*/
     }
 
     @Override
