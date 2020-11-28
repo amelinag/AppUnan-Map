@@ -20,47 +20,87 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Map extends AppCompatActivity{
     private MapView _map; //creation de la map
 
-    private Associations _associations;
+
+    public Associations _associations;
+    private Settings _settings;
+    public List<Integer> listOfNewIds = new ArrayList<>();
 
 
-    public Map(Associations associations, MapView map) {
+    String userCountry, userAddress;
+
+
+    public Map(Associations associations, MapView map, Settings settings) {
         this._associations = associations;
         this._map = map;
+        this._settings= settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this._settings = settings;
+    }
+    public Settings getSettings(){
+        return this._settings;
     }
 
 
-    public ArrayList<OverlayItem> displayItems(Context context) {
-        Double[] a={48.3994098,-4.4981507};
-        Double[] b={48.3842446,-4.5016007};
-        Double[] c={48.4059796,-4.4752021};
-        Double[] d={48.4212329,-4.4674397};
-        ArrayList<Double[]> coordinates = new ArrayList<>();
-        coordinates.add(a);
-        coordinates.add(b);
-        coordinates.add(c);
-        coordinates.add(d);
-        //System.out.println("\n\ncoordinates= " + coordinates );
-        List<String> names =  _associations.getName();
-        ArrayList<OverlayItem> items = new ArrayList<>();
-        Marker startMarker = new Marker(_map);
+
+    public ArrayList<GeoPoint> getPoints(Context context) {
+        List<Double[]> coordinates = _associations.getLocations(context);
+        ArrayList<GeoPoint> pointsAssociations = new ArrayList<>();
+
         if (coordinates != null) {
             for (int i = 0; i < coordinates.size(); i++) {
-                Double[] loc = coordinates.get(i);
-                String n = names.get(i);
-                GeoPoint point = new GeoPoint(loc[0], loc[1]);
+                Double[] loc = coordinates.get(i);  //récupération de la liste des coordonnées
+
+                GeoPoint point = new GeoPoint(loc[0], loc[1]); //création des points en fonction des coordonnées
                 System.out.println("Latitude " + loc[1]);
                 System.out.println("Longitude " + loc[1]);
-                OverlayItem item = new OverlayItem(n, null, point);
 
-                System.out.println("name " + n);
-                items.add(item);
+                //System.out.println("name " + n);
+                pointsAssociations.add(point);
+            }
+        }
 
+
+        return pointsAssociations;
+    }
+
+    public List<String> getNames()
+    {
+        List<String> names = _associations.getName();
+        List<String> namesMap = new ArrayList<>();
+        System.out.println("name " + names);
+        if (names != null) {
+            for (String n: names) {
+                namesMap.add(n);  //récupération de la liste des noms
+                Integer id = _associations.getID(n);  //récupération de l'id en fonction du nom
+                listOfNewIds.add(id);
+                }
+            }
+            System.out.println("listIds" + listOfNewIds);
+        return namesMap;
+
+    }
+
+    public ArrayList<OverlayItem> displayItems(GeoPoint myLocation, List<GeoPoint> pointsAssociations, List<String> names) {
+
+
+        ArrayList<OverlayItem> items = new ArrayList<>();
+
+        if (pointsAssociations != null) {
+            for (int i = 0; i < pointsAssociations.size(); i++) {
+                GeoPoint point = pointsAssociations.get(i);
+                if (this._settings.checkRadius(myLocation, point)) {
+                    String n = names.get(i);  //récupération de la liste des noms
+                    OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
+                    items.add(item);
+
+                }
             }
         }
         return items;
@@ -111,4 +151,6 @@ public class Map extends AppCompatActivity{
     }
 
 
-}
+
+    }
+
