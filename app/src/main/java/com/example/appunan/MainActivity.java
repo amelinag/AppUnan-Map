@@ -189,6 +189,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 myItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
                 return true;
 
             }

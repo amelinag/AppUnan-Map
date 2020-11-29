@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/total"
+    android:orientation="vertical"
+    >
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,173 +31,12 @@
 
     </org.osmdroid.views.MapView>
 
-
-    <ImageView
-        android:id="@+id/resume"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-15dp"
-        android:contentDescription="@string/desc"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/background"
-        tools:srcCompat="@drawable/background" />
-
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="290dp"
-        android:layout_marginLeft="290dp"
-        android:text="@string/bouton"
-        android:visibility="invisible"
-        app:backgroundTint="#3454D5"
-        app:iconTint="#000000" />
-
-    <TextView
-
-        android:id="@+id/textViewName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="170dp"
-        android:textColor="#000000"
-        android:textColorHighlight="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/textViewAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="50dp"
-
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="140dp"
-        android:textColor="#000000"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/textViewPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="50dp"
-
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="110dp"
-        android:textColor="#000000"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/textViewWebsite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="50dp"
-
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="80dp"
-        android:textColor="#000000"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/ImageLocation"
-        android:layout_width="29dp"
-        android:layout_height="22dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="138dp"
-        android:contentDescription="@string/desc"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/location" />
-
     <include
         layout="@layout/bottom_sheet"/>
 
 
 
 
-    <ImageButton
-        android:id="@+id/openSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="300dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="25dp"
-        android:background="@android:color/transparent"
-        android:scrollbarThumbHorizontal="@android:color/transparent"
-        android:scrollbarThumbVertical="@android:color/transparent"
-        android:src="@drawable/settings"
-        android:tint="@android:color/transparent" />
-
-    <ImageView
-        android:id="@+id/settings"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="-15dp"
-        android:background="@color/white"
-        android:contentDescription="@string/desc"
-        android:visibility="invisible" />
-
-
-    <Button
-        android:id="@+id/closeSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="290dp"
-        android:layout_marginLeft="290dp"
-        android:text="@string/bouton"
-        android:visibility="visible"
-        app:backgroundTint="#3454D5"
-        app:iconTint="#000000" />
-
-    <TextView
-        android:id="@+id/titleSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
-        android:text="Paramètres"
-        android:textColor="#3454D5"
-        android:textSize="40sp"
-        android:visibility="invisible" />
-
-
-    <TextView
-        android:id="@+id/textRadius"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
-        android:gravity="center_horizontal"
-        android:text="Rayon d'affichage"
-        android:textColor="#3454D5"
-        android:textSize="20sp"
-        android:visibility="invisible" />
-
-
-    <SeekBar
-        android:id="@+id/choseRadius"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="260dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
-        android:gravity="center_horizontal"
-        android:max="30"
-        android:progress="3"
-        android:visibility="invisible" />
     <!--
         <SearchView
             android:id="@+id/search"
@@ -208,3 +55,6 @@
         android:visibility="invisible" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <include
+        layout="@layout/filter"/>
+</RelativeLayout>
