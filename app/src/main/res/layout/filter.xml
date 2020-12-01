@@ -72,7 +72,6 @@
         android:textSize="20sp"
         android:visibility="invisible" />
 
-
     <SeekBar
         android:id="@+id/choseRadius"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
@@ -84,6 +83,25 @@
         android:max="30"
         android:progress="3"
         android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_category"
+        android:layout_width="249dp"
+        android:layout_height="34dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="225dp"
+        android:text="catégories"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:visibility="invisible"
+        app:backgroundTint="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/text_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="category selection" />
+
 
 
 </RelativeLayout>

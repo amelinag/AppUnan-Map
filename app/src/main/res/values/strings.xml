@@ -5,4 +5,8 @@
     <string name="resume">Voir plus</string>
     <string name="Parameter">Paramètres</string>
     <string name="rayon">Rayon d affichage</string>
+    <string-array name="categories">
+        <item>Solidarité</item>
+        <item>Santé</item>
+    </string-array>
 </resources>
