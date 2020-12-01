@@ -143,32 +143,6 @@ public class Map extends AppCompatActivity{
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
     }
-/*
-
-    public List<String> getNames() {
-        return _associations.getName();
-
-    }
-
-    public List<String> getPhone(){
-        return _associations.getPhoneNumber();
-    }
-
-    public List<String> getAddress(){
-        return this._associations.getAddress();
-    }
-
-    public List<String> getWebsite(){
-        return this._associations.getWebsite();
-    }
-
-    public List<String> getResume(){
-        return this._associations.getResume();
-    }
-
-    public List<String> getEvent(){
-        return this._associations.getEvent();
-    }*/
 
     public List<Integer> getID(){
 

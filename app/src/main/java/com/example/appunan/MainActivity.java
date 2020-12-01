@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         db.open();
         List<Integer> id=m.getID();
         System.out.println("id "+ id);
-        List<GeoPoint> allPoints = m.getPoint(context,id);
+        //List<GeoPoint> allPoints = m.getPoint(context,id);
         db.close();
 
         ///////////////////// CREATION ET AFFICHAGE  ITEM MYLOCATION ///////////////////////////////
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 db.open();
                 progressChangedValue = progress;
-                /*
+
                 if(MainActivity.this.mOverlay !=null)
                 {
                     for(int i = 0; i < map.getOverlays().size(); i++)
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                         Overlay overlay = map.getOverlays().get(i);
                         map.getOverlays().remove(overlay);
                     }
-                }*/
+                }
                 map.getOverlays().add(yLocationOverlay);
                 double radiusMeters = (double)progress*1000;
                 System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
