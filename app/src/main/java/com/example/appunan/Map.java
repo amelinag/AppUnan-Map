@@ -2,11 +2,6 @@ package com.example.appunan;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +10,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +21,7 @@ public class Map extends AppCompatActivity{
 
     public Associations _associations;
     private Settings _settings;
-    public List<Integer> listOfNewIds = new ArrayList<>();
-
-
-    String userCountry, userAddress;
+    //public List<Integer> listOfIds = this._associations.getID();
 
 
     public Map(Associations associations, MapView map, Settings settings) {
@@ -48,18 +38,19 @@ public class Map extends AppCompatActivity{
     }
 
 
-
-    public ArrayList<GeoPoint> getPoints(Context context) {
-        List<Double[]> coordinates = _associations.getLocations(context);
+/*
+    public ArrayList<GeoPoint> getPoint(Context context,List<Integer> ids) {
+        //List<Double[]> coordinates = this._associations.getLocations(context);
         ArrayList<GeoPoint> pointsAssociations = new ArrayList<>();
 
-        if (coordinates != null) {
-            for (int i = 0; i < coordinates.size(); i++) {
-                Double[] loc = coordinates.get(i);  //récupération de la liste des coordonnées
+        if (ids != null) {
+            for (int i:ids) {
+                List<Double> loc = this._associations.getLocations(context,i);  //récupération de la liste des coordonnées
 
-                GeoPoint point = new GeoPoint(loc[0], loc[1]); //création des points en fonction des coordonnées
-                System.out.println("Latitude " + loc[1]);
-                System.out.println("Longitude " + loc[1]);
+                System.out.println("loc "+loc);
+                GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
+                System.out.println("Latitude " + loc.get(0));
+                System.out.println("Longitude " + loc.get(1));
 
                 //System.out.println("name " + n);
                 pointsAssociations.add(point);
@@ -68,65 +59,94 @@ public class Map extends AppCompatActivity{
 
 
         return pointsAssociations;
-    }
+    }*/
 
-    public List<String> getNames()
-    {
-        List<String> names = _associations.getName();
-        List<String> namesMap = new ArrayList<>();
-        System.out.println("name " + names);
-        if (names != null) {
-            for (String n: names) {
-                namesMap.add(n);  //récupération de la liste des noms
-                Integer id = _associations.getID(n);  //récupération de l'id en fonction du nom
-                listOfNewIds.add(id);
-                }
-            }
-            System.out.println("listIds" + listOfNewIds);
-        return namesMap;
 
-    }
-
-    public ArrayList<OverlayItem> displayItems(GeoPoint myLocation, List<GeoPoint> pointsAssociations, List<String> names) {
-
+    public ArrayList<OverlayItem> displayItemsbyRadius(GeoPoint myLocation,  List<Integer> ids, Context context) {
 
         ArrayList<OverlayItem> items = new ArrayList<>();
 
-        if (pointsAssociations != null) {
-            for (int i = 0; i < pointsAssociations.size(); i++) {
-                GeoPoint point = pointsAssociations.get(i);
+
+        if (ids !=null) {
+            for (int id : ids) {
+
+                List<Double> loc = this._associations.getLocations(context,id);  //récupération de la liste des coordonnées
+
+                System.out.println("loc "+loc);
+                GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
+                System.out.println("Latitude " + loc.get(0));
+                System.out.println("Longitude " + loc.get(1));
+
+                //System.out.println("name " + n)
+                System.out.println("point " + point);
+                System.out.println("id " + id);
                 if (this._settings.checkRadius(myLocation, point)) {
-                    String n = names.get(i);  //récupération de la liste des noms
+                    String n = this._associations.getName(id);  //récupération de la liste des noms
+                    System.out.println("name " + n);
                     OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
                     items.add(item);
-
                 }
             }
         }
         return items;
     }
 
-    public void Consult_association(BottomSheetBehavior bottomSheetBehavior,List<TextView>t,List<String> address,List<String> phone,List<String> website,List<String> event,List<String> resume,OverlayItem item,ArrayList<OverlayItem> items){
+
+    public ArrayList<OverlayItem> displayItemsbySearch( String search,  List<Integer> ids, Context context) {
+        ArrayList<OverlayItem> items = new ArrayList<>();
+
+        if (ids !=null) {
+            for (int id : ids) {
+                String name =this._associations.getName(id);
+                if(search.equals(name)) {
+
+                    List<Double> loc = this._associations.getLocations(context,id);  //récupération de la liste des coordonnées
+
+                    System.out.println("loc "+loc);
+                    GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
+                    System.out.println("Latitude " + loc.get(0));
+                    System.out.println("Longitude " + loc.get(1));
+                    System.out.println("name " + name);
+                    OverlayItem item = new OverlayItem(name, null, point); //création de chaque item
+                    items.add(item);
+                }
+            }
+        }
+        return items;
+    }
+
+    /*List<TextView>t,List<String> address,
+    List<String> phone,List<String> website,List<String> event,List<String> resume,*/
+
+    public void Consult_association(BottomSheetBehavior bottomSheetBehavior,List<TextView>t,
+                                    OverlayItem item,ArrayList<OverlayItem> items,List<Integer> ids){
 
         t.get(0).setText(item.getTitle());
-        for (int i=0;i<items.size();i++){
-            if (items.get(i).getTitle()==item.getTitle()){
-                t.get(1).setText(address.get(i));
-                t.get(2).setText(phone.get(i));
-                t.get(3).setText(website.get(i));
-                t.get(4).setText(resume.get(i));
-                if("".equals(event.get(i))){
-                    System.out.println("c'est bon"+ event.get(2));
+        for (int i = 0; i < items.size(); i++) {
+            String accurateTitle= items.get(i).getTitle();
+            if (accurateTitle == item.getTitle()) {
+                int id = this._associations.getIDbyName(accurateTitle);
+                t.get(1).setText(this._associations.getAddress(id));
+                t.get(2).setText(this._associations.getPhoneNumber(id));
+                t.get(3).setText(this._associations.getWebsite(id));
+                t.get(4).setText(this._associations.getResume(id));
+                if ("".equals(this._associations.getEvent(id))) {
+                    System.out.println("c'est bon" + this._associations.getEvent(2));
                     t.get(5).setText("Pas d'événement");
-                    t.get(5).setTextColor(Color.rgb(255,0,0));
-                }
-                else{
-                    t.get(5).setText(event.get(i));
-                    t.get(5).setTextColor(Color.rgb(0,0,255));
+                    t.get(5).setTextColor(Color.rgb(255, 0, 0));
+                } else {
+                    t.get(5).setText(this._associations.getEvent(id));
+                    t.get(5).setTextColor(Color.rgb(0, 0, 255));
                 }
             }
         }
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+    }
+/*
+
+    public List<String> getNames() {
+        return _associations.getName();
 
     }
 
@@ -134,23 +154,26 @@ public class Map extends AppCompatActivity{
         return _associations.getPhoneNumber();
     }
 
-    public List<String> getAddres(){
-        return _associations.getAddress();
+    public List<String> getAddress(){
+        return this._associations.getAddress();
     }
 
     public List<String> getWebsite(){
-        return _associations.getWebsite();
+        return this._associations.getWebsite();
     }
 
     public List<String> getResume(){
-        return _associations.getResume();
+        return this._associations.getResume();
     }
 
     public List<String> getEvent(){
-        return _associations.getEvent();
+        return this._associations.getEvent();
+    }*/
+
+    public List<Integer> getID(){
+
+        return this._associations.getID();
     }
-
-
 
     }
 
