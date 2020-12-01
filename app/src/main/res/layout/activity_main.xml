@@ -37,22 +37,23 @@
 
 
 
-    <!--
-        <SearchView
-            android:id="@+id/search"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            android:iconifiedByDefault="false"
-            android:queryHint="Search Here" />
+
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="30dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Here" />
 
     <ListView
         android:id="@+id/listView"
+        android:layout_marginTop="100dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:layout_below="@+id/search"
-        android:visibility="invisible" />-->
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <include

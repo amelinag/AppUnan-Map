@@ -35,18 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity<radiusMeters> extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
 
-    private ImageView resume;
     private ImageView settings;
 
-    private ImageView IconLocation;
-    private ImageView IconPhone;
-    private ImageView IconWebsite;
-
-
-    private Button close;
     private Button closeSettings;
     private ImageButton openSettings;
 
@@ -55,18 +48,12 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
     private TextView a;
     private TextView p;
     private TextView w;
-
     private TextView textRadius;
     private TextView titleSettings;
-
     private SeekBar chooseRadius;
 
-    private String associationsNames;
-    private MapView map; //creation de la map
-    private MyLocation myLocation = new MyLocation();
 
-    private List<GeoPoint> allPoints= new ArrayList<>();
-    private List<String> names = new ArrayList<>();
+    private MapView map; //creation de la map
     private Radius radius = new Radius();
     private Settings setting = new Settings(radius);
     private ArrayList<OverlayItem> items= new ArrayList<>();
@@ -140,42 +127,35 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         final Associations db = Associations.getInstance(context); // création de la bdd
         Map m = new Map(db, map, setting);
         System.out.println("radius " + radius.getRadius());
-        db.open();
 
 
         /// CREATION DES ITEMS EN FONCTION DE LA BDD ///
+        MyLocation myLocation = new MyLocation();
         GeoPoint myPoint= myLocation.getMyLocation( this,  context);  // récupérer le point correspond à ma localisation
-        this.allPoints = m.getPoints(context);
-        this.names = m.getNames();
+
+
+
+        //List<String> names = m.getNames()
 
 
 /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
-        List<String> ad=m.getAddres();
+
+        /*List<String> ad=m.getAddress();
         List<String> pn=m.getPhone();
         List<String> web=m.getWebsite();
         List<String> res=m.getResume();
         List<String> ev=m.getEvent();
+        List<Integer> id=m.getID();
+        System.out.println("id "+ id);
+
 
         db.close();
-        System.out.println(ev.get(3));
-
-
-        /*
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getApplicationContext(),  //associer les pastilles avec la map
-                items, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
-
-                return true;
-            }
-
-            @Override
-            public boolean onItemLongPress(int index, OverlayItem item) {
-                return false;
-            }
-        });*/
-
+        System.out.println(ev.get(3));*/
+        db.open();
+        List<Integer> id=m.getID();
+        System.out.println("id "+ id);
+        List<GeoPoint> allPoints = m.getPoint(context,id);
+        db.close();
 
         ///////////////////// CREATION ET AFFICHAGE  ITEM MYLOCATION ///////////////////////////////
 
@@ -189,7 +169,7 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 myItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
+                //m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
                 return true;
 
             }
@@ -212,11 +192,9 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         // interaction settings
 
         this.settings = (ImageView) findViewById(R.id.settings);
-
         this.openSettings = (ImageButton)findViewById(R.id.openSettings);
         this.closeSettings = (Button)findViewById(R.id.closeSettings);
         closeSettings.setVisibility(View.INVISIBLE);
-
         this.chooseRadius=(SeekBar)findViewById(R.id.choseRadius);
         this.textRadius= (TextView)findViewById(R.id.textRadius);
         this.titleSettings= (TextView)findViewById(R.id.titleSettings);
@@ -254,8 +232,86 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
             int progressChangedValue = 0;
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                db.open();
                 progressChangedValue = progress;
+                /*
+                if(MainActivity.this.mOverlay !=null)
+                {
+                    for(int i = 0; i < map.getOverlays().size(); i++)
+                    {
+                        Overlay overlay = map.getOverlays().get(i);
+                        map.getOverlays().remove(overlay);
+                    }
+                }*/
+                map.getOverlays().add(yLocationOverlay);
+                double radiusMeters = (double)progress*1000;
+                System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
+                MainActivity.this.radius.setRadius(radiusMeters);
+                MainActivity.this.setItems(m.displayItemsbyRadius(myPoint,id,context));
+                db.close();
+                System.out.println("items " + MainActivity.this.getItems());
 
+
+                MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
+                        MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+                    @Override
+                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        db.open();
+                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        db.close();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int index, OverlayItem item) {
+                        return false;
+                    }
+
+
+
+                });
+
+                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+                map.getOverlays().add(MainActivity.this.mOverlay);
+                map.refreshDrawableState();
+
+
+
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
+                        Toast.LENGTH_SHORT).show();
+
+
+
+
+
+            }
+
+        });
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        this.searchView = findViewById(R.id.search);
+        this.listView = findViewById(R.id.listView);
+        //adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,names);
+        //listView.setAdapter(adapter);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                /*if(list.contains(query)){
+                    ((ArrayAdapter) adapter).getFilter().filter(query);
+                }else{
+                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }*/
+
+                //map.getOverlays().add(yLocationOverlay);
                 if(MainActivity.this.mOverlay !=null)
                 {
                     for(int i = 0; i < map.getOverlays().size(); i++)
@@ -264,19 +320,19 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                         map.getOverlays().remove(overlay);
                     }
                 }
-                map.getOverlays().add(yLocationOverlay);
-                double radiusMeters = (double)progress*1000;
-                System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
-                MainActivity.this.radius.setRadius(radiusMeters);
-                MainActivity.this.setItems(m.displayItems(myPoint,MainActivity.this.allPoints, MainActivity.this.names));
+                System.out.println("query"+query);
+                db.open();
+                MainActivity.this.setItems(m.displayItemsbySearch(query,id,context));
+                db.close();
                 System.out.println("items " + MainActivity.this.getItems());
-
 
                 MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
                         MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, MainActivity.this.items);
+                        db.open();
+                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        db.close();
                         return true;
                     }
 
@@ -291,47 +347,17 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
                 map.getOverlays().add(MainActivity.this.mOverlay);
                 map.refreshDrawableState();
 
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
-                        Toast.LENGTH_SHORT).show();
-
-
-            }
-
-        });
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        /*
-        this.searchView = findViewById(R.id.search);
-        this.listView = findViewById(R.id.listView);
-        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,this.names);
-        listView.setAdapter(adapter);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(list.contains(query)){
-                    ((ArrayAdapter) adapter).getFilter().filter(query);
-
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }
 
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                ((ArrayAdapter) adapter).getFilter().filter(newText);
-                listView.setVisibility(View.VISIBLE);
+                //((ArrayAdapter) adapter).getFilter().filter(newText);
                 return false;
             }
-        });*/
+        });
+
+
     }
 
     @Override
@@ -344,7 +370,6 @@ public class MainActivity<radiusMeters> extends AppCompatActivity {
         super.onResume();
         map.onResume();
     }
-
 
 
 

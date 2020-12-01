@@ -6,7 +6,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class DataBaseManager extends SQLiteAssetHelper {
 
-    public static final int DATA_VERSION = 10;
+    public static final int DATA_VERSION = 12;
     private static final String DATABASE_NAME = "associations.db";
 
     public DataBaseManager(Context context) {

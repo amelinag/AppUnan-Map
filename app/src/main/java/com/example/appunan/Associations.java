@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.sql.RowSetEvent;
-
 public class Associations {
 
 
@@ -47,133 +45,101 @@ public class Associations {
 
     //// REQUETE VERS LA BASE DE DONNEES////
 
-    /*public String getName(){
-        c= db.rawQuery("SELECT address FROM association", null);
-        f(c.getCount() !=1){
-        return "error";
-    }
 
-        c.moveToFirst();
-        return c.getString(0);
-    }*/
-
-    public List<Double[]> getLocations(Context context)
+    public List<Double> getLocations(Context context, int ids)
     {
-        c= db.rawQuery("SELECT address FROM association", null);
+        String req = "SELECT address FROM association WHERE id = "+Integer.toString(ids);
+        c= db.rawQuery(req, null);
         c.moveToFirst();
-        System.out.println(c.getString(0));
-        List<Double[]> location = new ArrayList<>();;
-        while (!c.isAfterLast()){
-            try {
-                //String address1 = "11 rue Lanrédec, 29200 Brest";
-                //System.out.println(c.getString(0));
+        List<Double> location =new ArrayList<>();
+        try {
+            Geocoder geocoder = new Geocoder(context, Locale.FRANCE);
+            int index = c.getColumnIndex("address");
+            List<Address> addresses = geocoder.getFromLocationName(c.getString(0),5);
+            Address address = addresses.get(0);
+            System.out.println("result latitude" + address.getLatitude() );
+            System.out.println("result longitude" + address.getLongitude() );
+            location.add(address.getLatitude());
+            location.add(address.getLongitude());
 
-
-
-                Geocoder geocoder = new Geocoder(context, Locale.FRANCE);
-
-
-                int index = c.getColumnIndex("address");
-                List<Address> addresses = geocoder.getFromLocationName(c.getString(index), 1);
-                Address address = addresses.get(0);
-                Double[] aLocation =  {address.getLatitude(),address.getLongitude()};
-                System.out.println("result latitude" + address.getLatitude() );
-                System.out.println("result longitude" + address.getLongitude() );
-                location.add(aLocation);
-                c.moveToNext();
-
-            }catch (IOException e){
-                e.printStackTrace();
-                return null;
-            }
+        }catch (IOException e){
+            e.printStackTrace();
+            return null;
         }
-
         return location;
 
     }
 
-    public List<String> getName()
+    public String getName(int ids)
     {
-        c= db.rawQuery("SELECT name FROM association", null);
+        c= db.rawQuery("SELECT name FROM association WHERE id = " + Integer.toString(ids), null);
         c.moveToFirst();
-        List<String> names = new ArrayList<>();
-        while (!c.isAfterLast()){
-            int index = c.getColumnIndex("name");
-            names.add(c.getString(index));
-            c.moveToNext();
-
-        }
+        String names=c.getString(0);
         return names;
-
     }
 
-    public List<String> getPhoneNumber() {
-        c = db.rawQuery("SELECT phoneNumber FROM association", null);
+
+    public String  getPhoneNumber(int ids)
+    {
+        c= db.rawQuery("SELECT phoneNumber FROM association WHERE id = " + Integer.toString(ids), null);
         c.moveToFirst();
-        List<String> phoneNumbers  = new ArrayList<>();
+
+        String phoneNumber=c.getString(0);
+        return phoneNumber;
+    }
+
+    public String  getAddress(int ids)
+    {
+        c= db.rawQuery("SELECT address FROM association WHERE id = " + Integer.toString(ids), null);
+        c.moveToFirst();
+
+        String phoneNumber=c.getString(0);
+        return phoneNumber;
+    }
+
+    public String  getWebsite(int ids)
+    {
+        c= db.rawQuery("SELECT website FROM association WHERE id = " + Integer.toString(ids), null);
+        c.moveToFirst();
+
+        String website=c.getString(0);
+        return website;
+    }
+
+    public List<Integer> getID() {
+        c = db.rawQuery("SELECT id FROM association", null);
+        c.moveToFirst();
+        List<Integer> ids  = new ArrayList<>();
         while (!c.isAfterLast()) {
-            int index = c.getColumnIndex("phoneNumber");
-            phoneNumbers.add(c.getString(index));
+            int index = c.getColumnIndex("id");
+            ids.add(c.getInt(index));
             c.moveToNext();
         }
-        return phoneNumbers;
+        return ids;
     }
 
-    public List<String> getAddress() {
-        c = db.rawQuery("SELECT address FROM association", null);
+    public Integer getIDbyName(String names)
+    {
+        c= db.rawQuery("SELECT id FROM association WHERE name=? ", new String[]{names});
         c.moveToFirst();
-        List<String> Address  = new ArrayList<>();
-        while (!c.isAfterLast()) {
-            int index = c.getColumnIndex("address");
-            Address.add(c.getString(index));
-            c.moveToNext();
-        }
-        return Address;
+        int id=c.getInt(0);
+        return id;
     }
 
-    public List<String> getWebsite() {
-        c = db.rawQuery("SELECT website FROM association", null);
+    public String  getResume(int ids)
+    {
+        c= db.rawQuery("SELECT resume FROM association WHERE id = " + Integer.toString(ids), null);
         c.moveToFirst();
-        List<String> Website  = new ArrayList<>();
-        while (!c.isAfterLast()) {
-            int index = c.getColumnIndex("website");
-            Website.add(c.getString(index));
-            c.moveToNext();
-        }
-        return Website;
+        String resume=c.getString(0);
+        return resume;
     }
 
-
-    public int getID(String name) {
-        c = db.rawQuery("SELECT id FROM association where name = ?", new String[] {name});
+    public String  getEvent(int ids)
+    {
+        c= db.rawQuery("SELECT event FROM association WHERE " + ids, null);
         c.moveToFirst();
-        return c.getInt(0);
+        String event=c.getString(0);
+        return event;
     }
-
-
-    public List<String> getResume() {
-        c = db.rawQuery("SELECT resume FROM association", null);
-        c.moveToFirst();
-        List<String> Resume  = new ArrayList<>();
-        while (!c.isAfterLast()) {
-            int index = c.getColumnIndex("resume");
-            Resume.add(c.getString(index));
-            c.moveToNext();
-        }
-        return Resume;
-    }
-
-    public List<String> getEvent() {
-        c = db.rawQuery("SELECT event FROM association", null);
-        c.moveToFirst();
-        List<String> Event  = new ArrayList<>();
-        while (!c.isAfterLast()) {
-            int index = c.getColumnIndex("event");
-            Event.add(c.getString(index));
-            c.moveToNext();
-        }
-        return Event;
-    }
-
 
 }
