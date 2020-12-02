@@ -209,8 +209,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
                 String[] categories= new String[]{"Santé","Solidarité"};
-                final boolean[] checkedCategory= new boolean[]{true,false};
+                final boolean[] checkedCategory= new boolean[]{false,false};
                 final List<String> categoryList= Arrays.asList(categories);
+
                 builder.setTitle("Select categories");
                 builder.setIcon(R.drawable.ico);
                 builder.setMultiChoiceItems(categories, checkedCategory, new DialogInterface.OnMultiChoiceClickListener() {
@@ -234,10 +235,45 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+                db.open();
+                if(MainActivity.this.mOverlay !=null)
+                {
+                    for(int i = 0; i < map.getOverlays().size(); i++)
+                    {
+                        Overlay overlay = map.getOverlays().get(i);
+                        map.getOverlays().remove(overlay);
+                    }
+                }
+                db.open();
+                MainActivity.this.setItems(m.displayItemsbyCategory(categoryList,id,context));
+                db.close();
+                System.out.println("items " + MainActivity.this.getItems());
+
+                MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
+                        MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+                    @Override
+                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        db.open();
+                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        db.close();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int index, OverlayItem item) {
+                        return false;
+                    }
+
+                });
+
+                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+                map.getOverlays().add(MainActivity.this.mOverlay);
+                map.refreshDrawableState();
                 AlertDialog dialog=builder.create();
                 dialog.show();
 
             }
+
         });
 
 
