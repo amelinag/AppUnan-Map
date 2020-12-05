@@ -12,6 +12,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.OverlayItem;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,6 +111,29 @@ public class Map extends AppCompatActivity{
                     OverlayItem item = new OverlayItem(name, null, point); //création de chaque item
                     items.add(item);
                 }
+            }
+        }
+        return items;
+    }
+
+    public ArrayList<OverlayItem> displayItemsbyCategory(List<String> category,List<Integer> ids,Context context){
+        ArrayList<OverlayItem> items=new ArrayList<>();
+        if (ids!=null){
+            for(int id :ids){
+                String cat=this._associations.getCategory(id);
+                if(category.equals(cat)){
+                    List<Double> loc = this._associations.getLocations(context,id);  //récupération de la liste des coordonnées
+
+                    System.out.println("loc "+loc);
+                    GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
+                    System.out.println("Latitude " + loc.get(0));
+                    System.out.println("Longitude " + loc.get(1));
+                    String n = this._associations.getName(id);
+                    System.out.println("name " + n);
+                    OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
+                    items.add(item);
+                }
+
             }
         }
         return items;
