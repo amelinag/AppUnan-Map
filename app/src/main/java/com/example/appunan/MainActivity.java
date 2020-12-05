@@ -213,6 +213,11 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        for(int i = 0; i < map.getOverlays().size(); i++)
+                        {
+                            Overlay overlay = map.getOverlays().get(i);
+                            map.getOverlays().remove(overlay);
+                        }
                         for (int i=0;i<categories.length;i++){
                             if(checkedCategory[i]){
                                 currents.add(categories[i]);
@@ -252,11 +257,6 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
                         map.getOverlays().add(MainActivity.this.mOverlay);
                         map.refreshDrawableState();
-                        for(int i = 0; i < map.getOverlays().size(); i++)
-                        {
-                            Overlay overlay = map.getOverlays().get(i);
-                            map.getOverlays().remove(overlay);
-                        }
                     }
                 });
 

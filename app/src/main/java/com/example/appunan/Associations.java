@@ -136,7 +136,7 @@ public class Associations {
 
     public String  getEvent(int ids)
     {
-        c= db.rawQuery("SELECT event FROM association WHERE " + ids, null);
+        c= db.rawQuery("SELECT event FROM association WHERE " + Integer.toString(ids), null);
         c.moveToFirst();
         String event=c.getString(0);
         return event;
@@ -144,10 +144,11 @@ public class Associations {
 
     public String  getCategory(int ids)
     {
-        c= db.rawQuery("SELECT domain FROM association WHERE " + ids, null);
+        c= db.rawQuery("SELECT domain FROM association WHERE id = " + Integer.toString(ids), null);
         c.moveToFirst();
-        String category=c.getString(0);
-        return category;
+
+        String categorie=c.getString(0);
+        return categorie;
     }
 
 }

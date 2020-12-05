@@ -96,12 +96,6 @@
         android:visibility="invisible"
         app:backgroundTint="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/text_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="category selection" />
-
 
 
 </RelativeLayout>
