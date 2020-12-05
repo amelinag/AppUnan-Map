@@ -119,10 +119,8 @@ public class MainActivity extends AppCompatActivity {
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK); //render
         map.setBuiltInZoomControls(true);  //pour le zoom
-        GeoPoint startPoint = new GeoPoint(48.38547134399414, -4.5312371253967285); //Position de depart
         IMapController mapController = map.getController();
         mapController.setZoom(18.0);  //definir le zoom
-        mapController.setCenter(startPoint);
 
         final Associations db = Associations.getInstance(context); // création de la bdd
         Map m = new Map(db, map, setting);
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         /// CREATION DES ITEMS EN FONCTION DE LA BDD ///
         MyLocation myLocation = new MyLocation();
         GeoPoint myPoint= myLocation.getMyLocation( this,  context);  // récupérer le point correspond à ma localisation
-
+        mapController.setCenter(myPoint);
 
 
         //List<String> names = m.getNames()
@@ -140,17 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
 /// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
 
-        /*List<String> ad=m.getAddress();
-        List<String> pn=m.getPhone();
-        List<String> web=m.getWebsite();
-        List<String> res=m.getResume();
-        List<String> ev=m.getEvent();
-        List<Integer> id=m.getID();
-        System.out.println("id "+ id);
-
-
-        db.close();
-        System.out.println(ev.get(3));*/
         db.open();
         List<Integer> id=m.getID();
         System.out.println("id "+ id);
@@ -232,9 +219,22 @@ public class MainActivity extends AppCompatActivity {
             int progressChangedValue = 0;
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                db.open();
+
                 progressChangedValue = progress;
 
+
+
+
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
+                        Toast.LENGTH_SHORT).show();
+                db.open();
                 if(MainActivity.this.mOverlay !=null)
                 {
                     for(int i = 0; i < map.getOverlays().size(); i++)
@@ -244,10 +244,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 map.getOverlays().add(yLocationOverlay);
-                double radiusMeters = (double)progress*1000;
+                double radiusMeters = (double)progressChangedValue*1000;
                 System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
                 MainActivity.this.radius.setRadius(radiusMeters);
-                MainActivity.this.setItems(m.displayItemsbyRadius(myPoint,id,context));
+                MainActivity.this.setItems(m.filterItemsbyRadius(myPoint,id,context));
                 db.close();
                 System.out.println("items " + MainActivity.this.getItems());
 
@@ -261,31 +261,15 @@ public class MainActivity extends AppCompatActivity {
                         db.close();
                         return true;
                     }
-
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
                         return false;
                     }
-
-
-
                 });
 
                 MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
                 map.getOverlays().add(MainActivity.this.mOverlay);
                 map.refreshDrawableState();
-
-
-
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
-                        Toast.LENGTH_SHORT).show();
 
 
 
@@ -322,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 System.out.println("query"+query);
                 db.open();
-                MainActivity.this.setItems(m.displayItemsbySearch(query,id,context));
+                MainActivity.this.setItems(m.filterItemsbySearch(query,id,context));
                 db.close();
                 System.out.println("items " + MainActivity.this.getItems());
 

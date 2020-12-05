@@ -62,7 +62,7 @@ public class Map extends AppCompatActivity{
     }*/
 
 
-    public ArrayList<OverlayItem> displayItemsbyRadius(GeoPoint myLocation,  List<Integer> ids, Context context) {
+    public ArrayList<OverlayItem> filterItemsbyRadius(GeoPoint myLocation,  List<Integer> ids, Context context) {
 
         ArrayList<OverlayItem> items = new ArrayList<>();
 
@@ -92,7 +92,7 @@ public class Map extends AppCompatActivity{
     }
 
 
-    public ArrayList<OverlayItem> displayItemsbySearch( String search,  List<Integer> ids, Context context) {
+    public ArrayList<OverlayItem> filterItemsbySearch( String search,  List<Integer> ids, Context context) {
         ArrayList<OverlayItem> items = new ArrayList<>();
 
         if (ids !=null) {
