@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currents.clear();
                 AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Select categories");
                 builder.setIcon(R.drawable.ico);
@@ -208,19 +209,17 @@ public class MainActivity extends AppCompatActivity {
                         checkedCategory[which]= isChecked;
                         String currentItem=categoryList.get(which);
 
-                        for( String i: currents){
-                            if((i!=currentItem)&(isChecked==true)){
-                                currents.add(currentItem);
-                            }
-                            else if ((i==currentItem)&&(isChecked==false)){
-                                currents.remove(currentItem);
-                            }
-                        }
                     }
                 });
+
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        for (int i=0;i<categories.length;i++){
+                            if(checkedCategory[i]){
+                                currents.add(categories[i]);
+                            }
+                        }
                         db.open();
                         if(MainActivity.this.mOverlay !=null)
                         {
