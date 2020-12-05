@@ -3,6 +3,7 @@ package com.example.appunan;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -154,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
         myItem.getMarker(3);
         myItems.add(myItem);
         System.out.println("item " + myItems);
+        Drawable myDraw=context.getResources().getDrawable(R.drawable.mylocation);
+        myItem.setMarker(myDraw);
 
         ItemizedOverlayWithFocus<OverlayItem> yLocationOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
                 myItems, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                                 map.getOverlays().remove(overlay);
                             }
                         }
+                        map.getOverlays().add(yLocationOverlay);
                         System.out.println("currents " + currents);
                         MainActivity.this.setItems(m.displayItemsbyCategory(currents,id,context));
                         db.close();
@@ -242,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public boolean onItemSingleTapUp(int index, OverlayItem item) {
                                 db.open();
-                                m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                                m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
                                 db.close();
                                 return true;
                             }
@@ -336,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.radius.setRadius(radiusMeters);
                 MainActivity.this.setItems(m.filterItemsbyRadius(myPoint,id,context));
                 db.close();
+
                 System.out.println("items " + MainActivity.this.getItems());
 
 
@@ -344,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         db.open();
-                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
                         db.close();
                         return true;
                     }
@@ -391,27 +396,25 @@ public class MainActivity extends AppCompatActivity {
                         map.getOverlays().remove(overlay);
                     }
                 }
+                map.getOverlays().add(yLocationOverlay);
                 System.out.println("query"+query);
                 db.open();
                 MainActivity.this.setItems(m.filterItemsbySearch(query,id,context));
                 db.close();
                 System.out.println("items " + MainActivity.this.getItems());
-
                 MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
                         MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
                         db.open();
-                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
                         db.close();
                         return true;
                     }
-
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
                         return false;
                     }
-
                 });
 
                 MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
@@ -424,9 +427,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 //((ArrayAdapter) adapter).getFilter().filter(newText);
+                if(MainActivity.this.mOverlay !=null)
+                {
+                    for(int i = 0; i < map.getOverlays().size(); i++)
+                    {
+                        Overlay overlay = map.getOverlays().get(i);
+                        map.getOverlays().remove(overlay);
+                    }
+                }
+                map.getOverlays().add(yLocationOverlay);
                 return false;
             }
+
         });
+
 
 
     }

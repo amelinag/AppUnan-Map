@@ -37,31 +37,6 @@ public class Map extends AppCompatActivity{
         return this._settings;
     }
 
-
-/*
-    public ArrayList<GeoPoint> getPoint(Context context,List<Integer> ids) {
-        //List<Double[]> coordinates = this._associations.getLocations(context);
-        ArrayList<GeoPoint> pointsAssociations = new ArrayList<>();
-
-        if (ids != null) {
-            for (int i:ids) {
-                List<Double> loc = this._associations.getLocations(context,i);  //récupération de la liste des coordonnées
-
-                System.out.println("loc "+loc);
-                GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
-                System.out.println("Latitude " + loc.get(0));
-                System.out.println("Longitude " + loc.get(1));
-
-                //System.out.println("name " + n);
-                pointsAssociations.add(point);
-            }
-        }
-
-
-        return pointsAssociations;
-    }*/
-
-
     public ArrayList<OverlayItem> filterItemsbyRadius(GeoPoint myLocation,  List<Integer> ids, Context context) {
 
         ArrayList<OverlayItem> items = new ArrayList<>();
@@ -83,7 +58,7 @@ public class Map extends AppCompatActivity{
                 if (this._settings.checkRadius(myLocation, point)) {
                     String n = this._associations.getName(id);  //récupération de la liste des noms
                     System.out.println("name " + n);
-                    OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
+                    OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
                     items.add(item);
                 }
             }
@@ -98,8 +73,7 @@ public class Map extends AppCompatActivity{
         if (ids !=null) {
             for (int id : ids) {
                 String name =this._associations.getName(id);
-                if(search.equals(name)) {
-
+                if(search.equalsIgnoreCase(name)) {
                     List<Double> loc = this._associations.getLocations(context,id);  //récupération de la liste des coordonnées
 
                     System.out.println("loc "+loc);
@@ -107,7 +81,7 @@ public class Map extends AppCompatActivity{
                     System.out.println("Latitude " + loc.get(0));
                     System.out.println("Longitude " + loc.get(1));
                     System.out.println("name " + name);
-                    OverlayItem item = new OverlayItem(name, null, point); //création de chaque item
+                    OverlayItem item = new OverlayItem(name, " ", point); //création de chaque item
                     items.add(item);
                 }
             }
@@ -131,7 +105,7 @@ public class Map extends AppCompatActivity{
                         System.out.println("Longitude " + loc.get(1));
                         String n = this._associations.getName(id);
                         System.out.println("name " + n);
-                        OverlayItem item = new OverlayItem(n, null, point); //création de chaque item
+                        OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
                         items.add(item);
                     }
                 }
@@ -141,10 +115,7 @@ public class Map extends AppCompatActivity{
         return items;
     }
 
-    /*List<TextView>t,List<String> address,
-    List<String> phone,List<String> website,List<String> event,List<String> resume,*/
-
-    public void Consult_association(BottomSheetBehavior bottomSheetBehavior,List<TextView>t,
+    public void consultAssociation(BottomSheetBehavior bottomSheetBehavior,List<TextView>t,
                                     OverlayItem item,ArrayList<OverlayItem> items,List<Integer> ids){
 
         t.get(0).setText(item.getTitle());
