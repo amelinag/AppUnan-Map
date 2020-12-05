@@ -204,14 +204,15 @@ public class MainActivity extends AppCompatActivity {
         this.textRadius= (TextView)findViewById(R.id.textRadius);
         this.titleSettings= (TextView)findViewById(R.id.titleSettings);
         this.but=(Button)findViewById(R.id.button_category);
+        String[] categories= new String[]{"Santé","Solidarité"};
+        final boolean[] checkedCategory= new boolean[]{false,false};
+        final List<String> categoryList= Arrays.asList(categories);
+        List<String> currents=new ArrayList<String>();
+        currents.add("Santé");
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
-                String[] categories= new String[]{"Santé","Solidarité"};
-                final boolean[] checkedCategory= new boolean[]{false,false};
-                final List<String> categoryList= Arrays.asList(categories);
-
                 builder.setTitle("Select categories");
                 builder.setIcon(R.drawable.ico);
                 builder.setMultiChoiceItems(categories, checkedCategory, new DialogInterface.OnMultiChoiceClickListener() {
@@ -219,13 +220,54 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         checkedCategory[which]= isChecked;
                         String currentItem=categoryList.get(which);
-                        //Toast.makeText( MainActivity.this,currentItem+""+isChecked,Toast.LENGTH_SHORT).show();
+
+                        for( String i: currents){
+                            if((i!=currentItem)&(isChecked==true)){
+                                currents.add(currentItem);
+                            }
+                            else if ((i==currentItem)&&(isChecked==false)){
+                                currents.remove(currentItem);
+                            }
+                        }
                     }
                 });
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        db.open();
+                        if(MainActivity.this.mOverlay !=null)
+                        {
+                            for(int i = 0; i < map.getOverlays().size(); i++)
+                            {
+                                Overlay overlay = map.getOverlays().get(i);
+                                map.getOverlays().remove(overlay);
+                            }
+                        }
+                        System.out.println("currents " + currents);
+                        MainActivity.this.setItems(m.displayItemsbyCategory(currents,id,context));
+                        db.close();
+                        System.out.println("items " + MainActivity.this.getItems());
 
+                        MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
+                                MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+                            @Override
+                            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                                db.open();
+                                m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                                db.close();
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onItemLongPress(int index, OverlayItem item) {
+                                return false;
+                            }
+
+                        });
+
+                        MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+                        map.getOverlays().add(MainActivity.this.mOverlay);
+                        map.refreshDrawableState();
                     }
                 });
 
@@ -235,40 +277,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-                db.open();
-                if(MainActivity.this.mOverlay !=null)
-                {
-                    for(int i = 0; i < map.getOverlays().size(); i++)
-                    {
-                        Overlay overlay = map.getOverlays().get(i);
-                        map.getOverlays().remove(overlay);
-                    }
-                }
-                db.open();
-                MainActivity.this.setItems(m.displayItemsbyCategory(categoryList,id,context));
-                db.close();
-                System.out.println("items " + MainActivity.this.getItems());
 
-                MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
-                        MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
-                    @Override
-                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        db.open();
-                        m.Consult_association(bottomSheetBehavior, t, item, MainActivity.this.items, id);
-                        db.close();
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onItemLongPress(int index, OverlayItem item) {
-                        return false;
-                    }
-
-                });
-
-                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
-                map.getOverlays().add(MainActivity.this.mOverlay);
-                map.refreshDrawableState();
                 AlertDialog dialog=builder.create();
                 dialog.show();
 
