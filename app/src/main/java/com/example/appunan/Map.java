@@ -37,35 +37,6 @@ public class Map extends AppCompatActivity{
         return this._settings;
     }
 
-    public ArrayList<OverlayItem> filterItemsbyRadius(GeoPoint myLocation,  List<Integer> ids, Context context) {
-
-        ArrayList<OverlayItem> items = new ArrayList<>();
-
-
-        if (ids !=null) {
-            for (int id : ids) {
-
-                List<Double> loc = this._associations.getLocations(context,id);  //récupération de la liste des coordonnées
-
-                System.out.println("loc "+loc);
-                GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
-                System.out.println("Latitude " + loc.get(0));
-                System.out.println("Longitude " + loc.get(1));
-
-                //System.out.println("name " + n)
-                System.out.println("point " + point);
-                System.out.println("id " + id);
-                if (this._settings.checkRadius(myLocation, point)) {
-                    String n = this._associations.getName(id);  //récupération de la liste des noms
-                    System.out.println("name " + n);
-                    OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
-                    items.add(item);
-                }
-            }
-        }
-        return items;
-    }
-
 
     public ArrayList<OverlayItem> filterItemsbySearch( String search,  List<Integer> ids, Context context) {
         ArrayList<OverlayItem> items = new ArrayList<>();
@@ -89,7 +60,7 @@ public class Map extends AppCompatActivity{
         return items;
     }
 
-    public ArrayList<OverlayItem> displayItemsbyCategory(List<String> category,List<Integer> ids,Context context){
+    public ArrayList<OverlayItem> filterItemsbyCategoryandRadius(List<String> category, List<Integer> ids, Context context, GeoPoint myLocation){
         ArrayList<OverlayItem> items=new ArrayList<>();
         if (ids!=null){
             for(int id :ids){
@@ -99,14 +70,16 @@ public class Map extends AppCompatActivity{
                     if (cat.equals(s)) {
                         List<Double> loc = this._associations.getLocations(context, id);  //récupération de la liste des coordonnées
 
-                        System.out.println("loc " + loc);
                         GeoPoint point = new GeoPoint(loc.get(0), loc.get(1)); //création des points en fonction des coordonnées
                         System.out.println("Latitude " + loc.get(0));
                         System.out.println("Longitude " + loc.get(1));
-                        String n = this._associations.getName(id);
-                        System.out.println("name " + n);
-                        OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
-                        items.add(item);
+
+                        if (this._settings.checkRadius(myLocation, point)) {
+                            String n = this._associations.getName(id);  //récupération de la liste des noms
+                            System.out.println("name " + n);
+                            OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
+                            items.add(item);
+                        }
                     }
                 }
 

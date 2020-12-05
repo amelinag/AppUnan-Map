@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private MapView map; //creation de la map
+    private Category category= new Category();
     private Radius radius = new Radius();
-    private Settings setting = new Settings(radius);
+    private Settings setting = new Settings(radius,category);
     private ArrayList<OverlayItem> items= new ArrayList<>();
 
 
@@ -76,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SearchView searchView;
     private ListView listView;
-    private ArrayList list;
-    private ArrayAdapter adapter;
     private Button but;
 
     private TextView r;
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomSheetBehavior bottomSheetBehavior;
 
+    private double progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         //List<String> names = m.getNames()
 
 
-/// CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
+        // CREATION ET AFFICHAGE DES ITEMS EN FONCTION DE LA BDD ///
 
         db.open();
         List<Integer> id=m.getID();
@@ -164,15 +163,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
                 //m.Consult_association(bottomSheetBehavior, t, ad, pn, web, ev, res, item, items);
                 return true;
-
             }
-
             @Override
             public boolean onItemLongPress(int index, OverlayItem item) {
                 return false;
             }
-
-
         });
 
         map.getOverlays().add(yLocationOverlay);
@@ -210,57 +205,19 @@ public class MainActivity extends AppCompatActivity {
                         checkedCategory[which]= isChecked;
                         String currentItem=categoryList.get(which);
 
+
                     }
                 });
 
                 builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for(int i = 0; i < map.getOverlays().size(); i++)
-                        {
-                            Overlay overlay = map.getOverlays().get(i);
-                            map.getOverlays().remove(overlay);
-                        }
                         for (int i=0;i<categories.length;i++){
                             if(checkedCategory[i]){
                                 currents.add(categories[i]);
                             }
                         }
-                        db.open();
-                        if(MainActivity.this.mOverlay !=null)
-                        {
-                            for(int i = 0; i < map.getOverlays().size(); i++)
-                            {
-                                Overlay overlay = map.getOverlays().get(i);
-                                map.getOverlays().remove(overlay);
-                            }
-                        }
-                        map.getOverlays().add(yLocationOverlay);
-                        System.out.println("currents " + currents);
-                        MainActivity.this.setItems(m.displayItemsbyCategory(currents,id,context));
-                        db.close();
-                        System.out.println("items " + MainActivity.this.getItems());
-
-                        MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
-                                MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
-                            @Override
-                            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                                db.open();
-                                m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
-                                db.close();
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onItemLongPress(int index, OverlayItem item) {
-                                return false;
-                            }
-
-                        });
-
-                        MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
-                        map.getOverlays().add(MainActivity.this.mOverlay);
-                        map.refreshDrawableState();
+                        MainActivity.this.category.set_categories(currents);
                     }
                 });
 
@@ -275,8 +232,17 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
 
             }
-
         });
+        db.open();
+        if(MainActivity.this.mOverlay !=null)
+        {
+            for(int i = 0; i < map.getOverlays().size(); i++)
+            {
+                Overlay overlay = map.getOverlays().get(i);
+                map.getOverlays().remove(overlay);
+            }
+        }
+
 
 
         openSettings.setOnClickListener(new View.OnClickListener() {
@@ -299,6 +265,43 @@ public class MainActivity extends AppCompatActivity {
                 textRadius.setVisibility(View.INVISIBLE);
                 titleSettings.setVisibility(View.INVISIBLE);
                 but.setVisibility(View.INVISIBLE);
+                map.getOverlays().add(yLocationOverlay);
+                System.out.println("currents " + currents);
+
+                if(MainActivity.this.mOverlay !=null)
+                {
+                    for(int i = 0; i < map.getOverlays().size(); i++)
+                    {
+                        Overlay overlay = map.getOverlays().get(i);
+                        map.getOverlays().remove(overlay);
+                    }
+                }
+
+                db.open();
+                MainActivity.this.setItems(m.filterItemsbyCategoryandRadius(currents,id,context, myPoint));
+                db.close();
+                System.out.println("items " + MainActivity.this.getItems());
+
+                MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
+                        MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
+                    @Override
+                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        db.open();
+                        m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
+                        db.close();
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int index, OverlayItem item) {
+                        return false;
+                    }
+
+                });
+
+                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+                map.getOverlays().add(MainActivity.this.mOverlay);
+                map.refreshDrawableState();
 
             }
         });
@@ -315,7 +318,6 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 progressChangedValue = progress;
-
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -325,48 +327,11 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
                         Toast.LENGTH_SHORT).show();
-                db.open();
-                if(MainActivity.this.mOverlay !=null)
-                {
-                    for(int i = 0; i < map.getOverlays().size(); i++)
-                    {
-                        Overlay overlay = map.getOverlays().get(i);
-                        map.getOverlays().remove(overlay);
-                    }
-                }
+
                 map.getOverlays().add(yLocationOverlay);
                 double radiusMeters = (double)progressChangedValue*1000;
                 System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
                 MainActivity.this.radius.setRadius(radiusMeters);
-                MainActivity.this.setItems(m.filterItemsbyRadius(myPoint,id,context));
-                db.close();
-
-                System.out.println("items " + MainActivity.this.getItems());
-
-
-                MainActivity.this.mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(context,  //associer les pastilles avec la map
-                        MainActivity.this.getItems(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {   //reaction au clic
-                    @Override
-                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        db.open();
-                        m.consultAssociation(bottomSheetBehavior, t, item, MainActivity.this.items, id);
-                        db.close();
-                        return true;
-                    }
-                    @Override
-                    public boolean onItemLongPress(int index, OverlayItem item) {
-                        return false;
-                    }
-                });
-
-                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
-                map.getOverlays().add(MainActivity.this.mOverlay);
-                map.refreshDrawableState();
-
-
-
-
-
             }
 
         });
@@ -376,18 +341,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.searchView = findViewById(R.id.search);
         this.listView = findViewById(R.id.listView);
-        //adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,names);
-        //listView.setAdapter(adapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /*if(list.contains(query)){
-                    ((ArrayAdapter) adapter).getFilter().filter(query);
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                }*/
-
-                //map.getOverlays().add(yLocationOverlay);
                 if(MainActivity.this.mOverlay !=null)
                 {
                     for(int i = 0; i < map.getOverlays().size(); i++)

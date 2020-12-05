@@ -1,19 +1,21 @@
 package com.example.appunan;
 
+import java.util.List;
+
 public class Category {
 
-    private String _category;
+    private List<String> _category;
 
-    public Category(String category)
+    public Category()
     {
-        this._category =category;
+
     }
 
-    public String get_categories() {
+    public List<String> get_categories() {
         return _category;
     }
 
-    public void set_categories(String category) {
+    public void set_categories(List<String> category) {
         this._category = category;
     }
 }
