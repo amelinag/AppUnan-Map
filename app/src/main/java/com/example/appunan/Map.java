@@ -2,6 +2,7 @@ package com.example.appunan;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,6 +55,8 @@ public class Map extends AppCompatActivity{
                     System.out.println("name " + name);
                     OverlayItem item = new OverlayItem(name, " ", point); //création de chaque item
                     items.add(item);
+                    Drawable myDraw=context.getResources().getDrawable(R.drawable.location);
+                    item.setMarker(myDraw);
                 }
             }
         }
@@ -79,6 +82,8 @@ public class Map extends AppCompatActivity{
                             System.out.println("name " + n);
                             OverlayItem item = new OverlayItem(n, " ", point); //création de chaque item
                             items.add(item);
+                            Drawable myDraw=context.getResources().getDrawable(R.drawable.location);
+                            item.setMarker(myDraw);
                         }
                     }
                 }

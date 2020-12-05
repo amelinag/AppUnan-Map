@@ -291,7 +291,6 @@ public class MainActivity extends AppCompatActivity {
                         db.close();
                         return true;
                     }
-
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
                         return false;
@@ -299,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
                 });
 
-                MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
+                MainActivity.this.mOverlay.setFocusItemsOnTap(false);  // clique sur la pastille
                 map.getOverlays().add(MainActivity.this.mOverlay);
                 map.refreshDrawableState();
 
