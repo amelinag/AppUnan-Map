@@ -142,4 +142,12 @@ public class Associations {
         return event;
     }
 
+    public String  getCategory(int ids)
+    {
+        c= db.rawQuery("SELECT domain FROM association WHERE " + ids, null);
+        c.moveToFirst();
+        String category=c.getString(0);
+        return category;
+    }
+
 }
