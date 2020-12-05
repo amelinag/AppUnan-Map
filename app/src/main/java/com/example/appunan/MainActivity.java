@@ -253,6 +253,11 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.mOverlay.setFocusItemsOnTap(true);  // clique sur la pastille
                         map.getOverlays().add(MainActivity.this.mOverlay);
                         map.refreshDrawableState();
+                        for(int i = 0; i < map.getOverlays().size(); i++)
+                        {
+                            Overlay overlay = map.getOverlays().get(i);
+                            map.getOverlays().remove(overlay);
+                        }
                     }
                 });
 
@@ -307,9 +312,6 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 progressChangedValue = progress;
-
-
-
 
             }
 
