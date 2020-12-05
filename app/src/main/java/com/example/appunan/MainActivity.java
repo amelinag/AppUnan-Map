@@ -2,8 +2,10 @@ package com.example.appunan;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -13,9 +15,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
@@ -32,6 +36,7 @@ import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList list;
     private ArrayAdapter adapter;
-    
+    private Button but;
 
     private TextView r;
     private TextView e;
@@ -185,6 +190,42 @@ public class MainActivity extends AppCompatActivity {
         this.chooseRadius=(SeekBar)findViewById(R.id.choseRadius);
         this.textRadius= (TextView)findViewById(R.id.textRadius);
         this.titleSettings= (TextView)findViewById(R.id.titleSettings);
+        this.but=(Button)findViewById(R.id.button_category);
+        but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder= new AlertDialog.Builder(MainActivity.this);
+                String[] categories= new String[]{"Santé","Solidarité"};
+                final boolean[] checkedCategory= new boolean[]{true,false};
+                final List<String> categoryList= Arrays.asList(categories);
+                builder.setTitle("Select categories");
+                builder.setIcon(R.drawable.ico);
+                builder.setMultiChoiceItems(categories, checkedCategory, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        checkedCategory[which]= isChecked;
+                        String currentItem=categoryList.get(which);
+                        //Toast.makeText( MainActivity.this,currentItem+""+isChecked,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                AlertDialog dialog=builder.create();
+                dialog.show();
+
+            }
+        });
 
 
         openSettings.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 chooseRadius.setVisibility(View.VISIBLE);
                 textRadius.setVisibility(View.VISIBLE);
                 titleSettings.setVisibility(View.VISIBLE);
+                but.setVisibility(View.VISIBLE);
 
             }
         });
@@ -205,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 chooseRadius.setVisibility(View.INVISIBLE);
                 textRadius.setVisibility(View.INVISIBLE);
                 titleSettings.setVisibility(View.INVISIBLE);
+                but.setVisibility(View.INVISIBLE);
 
             }
         });
