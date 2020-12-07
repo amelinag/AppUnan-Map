@@ -47,13 +47,6 @@
         android:iconifiedByDefault="false"
         android:queryHint="Search Here" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_marginTop="100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="500dp"
-        android:layout_below="@+id/search"
-        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <include
