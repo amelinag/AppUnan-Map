@@ -11,11 +11,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textRadius;
     private TextView titleSettings;
     private SeekBar chooseRadius;
+    private TextView valueRadius;
 
 
     private MapView map; //creation de la map
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SearchView searchView;
-    private ListView listView;
     private Button but;
 
     private TextView r;
@@ -184,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         this.closeSettings = (Button)findViewById(R.id.closeSettings);
         closeSettings.setVisibility(View.INVISIBLE);
         this.chooseRadius=(SeekBar)findViewById(R.id.choseRadius);
+        this.valueRadius= (TextView)findViewById(R.id.valueRadius);
         this.textRadius= (TextView)findViewById(R.id.textRadius);
         this.titleSettings= (TextView)findViewById(R.id.titleSettings);
         this.but=(Button)findViewById(R.id.button_category);
@@ -253,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
                 textRadius.setVisibility(View.VISIBLE);
                 titleSettings.setVisibility(View.VISIBLE);
                 but.setVisibility(View.VISIBLE);
+                valueRadius.setVisibility(View.VISIBLE);
 
             }
         });
@@ -265,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
                 textRadius.setVisibility(View.INVISIBLE);
                 titleSettings.setVisibility(View.INVISIBLE);
                 but.setVisibility(View.INVISIBLE);
+                valueRadius.setVisibility(View.INVISIBLE);
                 map.getOverlays().add(yLocationOverlay);
                 System.out.println("currents " + currents);
 
@@ -309,13 +310,13 @@ public class MainActivity extends AppCompatActivity {
 
         //////////////////////////////////FILTRAGE PAR RADIUS //////////////////////////////////////
 
-        // perform seek bar change listener event used for getting the progress value
+        this.valueRadius.setText("Rayon: " + chooseRadius.getProgress() + " / " + chooseRadius.getMax()+ " km");
         chooseRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             int progressChangedValue = 0;
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                valueRadius.setText("Rayon: " + progress + " / " + chooseRadius.getMax()+ " km");
                 progressChangedValue = progress;
             }
 
@@ -324,9 +325,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
-                        Toast.LENGTH_SHORT).show();
-
+               /* Toast.makeText(MainActivity.this, "Seek bar progress is :" + progressChangedValue,
+                        Toast.LENGTH_SHORT).show();*/
+                valueRadius.setText("Rayon: " + progressChangedValue+ " / " + chooseRadius.getMax()+ " km");
                 map.getOverlays().add(yLocationOverlay);
                 double radiusMeters = (double)progressChangedValue*1000;
                 System.out.println(radiusMeters);                                                                                               // MISE AA JOUR DES ITEMS
@@ -339,7 +340,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.searchView = findViewById(R.id.search);
-        this.listView = findViewById(R.id.listView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
