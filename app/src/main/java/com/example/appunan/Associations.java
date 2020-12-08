@@ -136,8 +136,9 @@ public class Associations {
 
     public String  getEvent(int ids)
     {
-        c= db.rawQuery("SELECT event FROM association WHERE " + Integer.toString(ids), null);
+        c= db.rawQuery("SELECT event FROM association WHERE id = " + Integer.toString(ids), null);
         c.moveToFirst();
+
         String event=c.getString(0);
         return event;
     }

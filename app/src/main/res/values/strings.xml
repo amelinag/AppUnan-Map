@@ -4,7 +4,7 @@
     <string name="bouton">Fermer</string>
     <string name="resume">Voir plus</string>
     <string name="Parameter">Paramètres</string>
-    <string name="rayon">Rayon d affichage</string>
+    <string name="rayon">Rayon affichage</string>
     <string-array name="categories">
         <item>Solidarité</item>
         <item>Santé</item>
