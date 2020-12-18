@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_map);
 
         this.n=(TextView)findViewById(R.id.textViewName);
         this.a=(TextView)findViewById(R.id.textViewAddress);
@@ -338,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
+        //////////////////////////////////FILTRAGE PAR MOTS-CLEFS ///////////////////////////////////
 
         this.searchView = findViewById(R.id.search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

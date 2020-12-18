@@ -7,16 +7,16 @@ public class Settings {
     private Radius _r;
     private Category _c;
 
-    public Settings(Radius radius, Category c)
+    public Settings(Radius radius, Category category)
     {
         this._r = radius;
-        this._c= c;
+        this._c= category;
     }
 
     public void changeSetting(Radius r, Category c)
     {
         this._r = r;
-        this._c= c;
+        this._c = c;
     }
     public Object[] getSettings()
     {
